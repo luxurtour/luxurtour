@@ -167,7 +167,58 @@
     .lang-btn:hover { color: #D4AF37; }
     .lang-switcher span { color: #ddd; font-size: .8rem; }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root { --gold: #D4AF37; --dark: #05301D; --gray-bg: #f5f6f8; --gray-light: #f0f1f3; --gray-text: #6b7280; --border: #e5e7eb; }
+
+    /* ------------------
+       Global green gradient balance
+       ------------------ */
+    :root {
+      --gold: #D4AF37;
+      --dark: #05301D;
+      --gray-bg: #f5f6f8;
+      --gray-light: #f0f1f3;
+      --gray-text: #6b7280;
+      --border: #e5e7eb;
+      --green-start: #05301D; /* original dark green */
+      --green-end:   #0b6b3a; /* brighter secondary green */
+      --green-gradient: linear-gradient(135deg, var(--green-start) 0%, var(--green-end) 100%);
+      --green-solid: var(--green-start);
+    }
+
+    /* Apply gradient to primary action surfaces */
+    .nav-logo-text { color: var(--green-solid) !important; }
+    .q-service-badge, .booking-pack-badge, .pack-cta, .booking-confirm, .q-btn-next, .q-btn-send {
+      background-image: var(--green-gradient) !important;
+      background-color: var(--green-solid) !important;
+      color: #fff !important;
+      border: none !important;
+    }
+
+    /* Featured pack keeps a gold hint but blends with green */
+    .pack-card.featured, .pack-card.featured .pack-cta {
+      background: linear-gradient(180deg, rgba(255,250,240,1) 0%, rgba(250,246,238,1) 100%);
+      border-color: rgba(212,175,55,.12);
+    }
+
+    /* Section headers and strong accents */
+    #why { background-image: var(--green-gradient); }
+    .q-progress-fill { background: var(--green-solid) !important; }
+    .cal-nav:hover, .cal-day:hover:not(.empty):not(.past), .cal-day.today { border-color: var(--green-solid) !important; color: var(--green-solid) !important; }
+    .time-slot:hover { border-color: var(--green-solid) !important; color: var(--green-solid) !important; }
+
+    /* Equipment / icons */
+    .eq-icon, .svc-card-custom-icon svg, .why-icon { background: var(--green-solid) !important; }
+
+    /* Booking badges, small buttons */
+    .booking-pack-badge { background-image: none !important; background-color: var(--green-solid) !important; }
+
+    /* Ensure focus/border accents use green */
+    .q-field input:focus, .q-field select:focus, .q-field textarea:focus, .booking-fields input:focus, .booking-fields select:focus { border-color: var(--green-solid) !important; }
+
+    /* Keep responsive behavior — mobile keeps solid buttons full-width */
+    @media (max-width:768px) {
+      .q-btn-next, .q-btn-send, .q-btn-reserve, .pack-cta, .booking-confirm { min-width: 100% !important; }
+    }
+
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
     body { font-family: 'Inter', sans-serif; color: #1a1a1a; background: #fff; overflow-x: hidden; }
     nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 70px; background: #05301D; backdrop-filter: blur(8px); border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: space-between; padding: 0 48px; }
@@ -203,7 +254,7 @@
     .svc-img img.cover { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
     .svc-card:hover .svc-img img.cover { transform: scale(1.04); }
     .svc-badge { position: absolute; bottom: 14px; left: 14px; width: 52px; height: 52px; background: #000; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .svc-badge img { width: 40px; height: 40px; object-fit: cover; display: block; }
+    .svc-badge img { width: 52px; height: 52px; object-fit: contain; display: block; }
     .svc-body { padding: 24px 26px; }
     .svc-body h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
     .svc-body p { font-size: .875rem; color: var(--gray-text); line-height: 1.65; }
@@ -253,6 +304,16 @@
     .svc-card-custom-body { padding: 36px 32px 32px; display: flex; flex-direction: column; flex: 1; position: relative; z-index: 1; }
     .svc-card-custom-icon { width: 56px; height: 56px; background: rgba(212,175,55,.15); border: 1.5px solid rgba(212,175,55,.4); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
     .svc-card-custom-icon svg { width: 28px; height: 28px; color: var(--gold); }
+
+    /* Restore 'Customise Your Service' icon to original gold style */
+    .svc-card-custom-icon {
+      background: rgba(212,175,55,.15) !important;
+      border: 1.5px solid rgba(212,175,55,.4) !important;
+    }
+    .svc-card-custom-icon svg {
+      color: var(--gold) !important;
+      background: none !important;
+    }
     .svc-card-custom h3 { font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 12px; letter-spacing: .01em; }
     .svc-card-custom p { font-size: .9rem; color: rgba(255,255,255,.65); line-height: 1.7; margin-bottom: 28px; flex: 1; }
     .svc-card-custom-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
@@ -392,33 +453,81 @@
     .q-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .q-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
     .q-section-title { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: -8px; }
-    .q-footer { padding: 0 32px 32px; display: flex; gap: 12px; }
-    .q-btn-send { flex: 1; padding: 13px; background: #05301D; color: #fff; border: none; border-radius: 10px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+    /* Adjusted questionnaire footer layout: keep prev on the left, push actions to the right */
+    .q-footer { padding: 0 32px 32px; display: flex; gap: 12px; align-items: center; }
+
+    /* Prev stays natural size on the left */
+    .q-btn-prev { padding: 13px 20px; background: none; color: #555; border: 1.5px solid var(--border); border-radius: 10px; font-size: .9rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+
+    /* Action buttons (Next / Send / Reserve) align to the right and don't stretch */
+    .q-btn-next, .q-btn-send, .q-btn-reserve {
+      flex: 0 0 auto;
+      padding: 11px 18px;
+      min-width: 120px;
+      border-radius: 10px;
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .2s;
+      margin-left: auto; /* push actions to the right */
+    }
+
+    .q-btn-next { background: #05301D; color: #fff; border: none; }
+    .q-btn-next:hover { background: var(--gold); }
+    .q-btn-send { background: #05301D; color: #fff; border: none; }
     .q-btn-send:hover { background: var(--gold); }
-    .q-btn-reserve { flex: 1; padding: 13px; background: var(--gold); color: #fff; border: none; border-radius: 10px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+    .q-btn-reserve { background: var(--gold); color: #fff; border: none; }
     .q-btn-reserve:hover { background: #b8962e; }
+
+    @media(max-width:768px) {
+      .q-footer { padding: 0 20px 24px; flex-direction: row; flex-wrap: wrap; gap: 8px; }
+      .q-btn-next, .q-btn-send, .q-btn-reserve { min-width: 100%; margin-left: 0; }
+    }
+
     .q-success { display: none; text-align: center; padding: 40px 32px; }
     .q-success.show { display: block; }
     .q-success-icon { width: 64px; height: 64px; background: #05301D; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; }
     .q-success-icon svg { width: 30px; height: 30px; color: #fff; }
     .q-success h4 { font-size: 1.15rem; font-weight: 800; margin-bottom: 10px; color: #1a1a1a; }
     .q-success p { font-size: .88rem; color: var(--gray-text); line-height: 1.65; }
-    @media(max-width:768px) { .q-header { padding: 22px 20px 0; } .q-body { padding: 20px 20px 24px; } .q-footer { padding: 0 20px 24px; flex-direction: column; } .q-row { grid-template-columns: 1fr; } }
+    /* 4-step progress */
+    .q-progress-wrap { padding: 20px 32px 0; }
+    .q-progress-steps { display: flex; justify-content: space-between; margin-bottom: 10px; position: relative; }
+    .q-progress-steps::before { content:''; position:absolute; top: 16px; left: 16px; right: 16px; height: 2px; background: var(--border); z-index: 0; }
+    .q-progress-step { display: flex; flex-direction: column; align-items: center; gap: 5px; position: relative; z-index: 1; flex: 1; }
+    .q-progress-step span { width: 32px; height: 32px; border-radius: 50%; background: #fff; color: #aaa; font-size: .8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; transition: all .3s; border: 2px solid var(--border); }
+    .q-progress-step small { font-size: .68rem; font-weight: 600; color: #aaa; transition: color .3s; }
+    .q-progress-step.active span { background: #05301D; color: #fff; border-color: #05301D; }
+    .q-progress-step.active small { color: #05301D; }
+    .q-progress-step.done span { background: var(--gold); color: #fff; border-color: var(--gold); }
+    .q-progress-step.done small { color: var(--gold); }
+    .q-progress-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+    .q-progress-fill { height: 100%; background: #05301D; border-radius: 2px; transition: width .35s ease; width: 25%; }
+    .q-steps-viewport { overflow: hidden; }
+    .q-steps { display: flex; transition: transform .35s cubic-bezier(.4,0,.2,1); }
+    .q-step { min-width: 100%; flex-shrink: 0; }
+    .q-btn-prev { padding: 13px 20px; background: none; color: #555; border: 1.5px solid var(--border); border-radius: 10px; font-size: .9rem; font-weight: 600; cursor: pointer; font-family: inherit; transition: all .2s; }
+    .q-btn-prev:hover { border-color: #1a1a1a; color: #1a1a1a; }
+    .q-btn-next { flex: 1; padding: 13px; background: #05301D; color: #fff; border: none; border-radius: 10px; font-size: .9rem; font-weight: 700; cursor: pointer; font-family: inherit; transition: background .2s; }
+    .q-btn-next:hover { background: var(--gold); }
+    @media(max-width:768px) { .q-header { padding: 22px 20px 0; } .q-body { padding: 20px 20px 24px; } .q-footer { padding: 0 20px 24px; flex-direction: row; flex-wrap: wrap; gap: 8px; } .q-row { grid-template-columns: 1fr; } .q-progress-wrap { padding: 14px 20px 0; } .q-progress-step small { display: none; } }
 
     /* WHY */
     #why { background: #05301D; color: #fff; }
     #why .sec-head h2 { color: #fff; }
     #why .sec-head p { color: rgba(255,255,255,.55); }
     .why-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 28px; max-width: 1100px; margin: 0 auto; text-align: center; }
-    .why-icon { width: 74px; height: 74px; background: #D4AF37; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
-    .why-icon svg { width: 32px; height: 32px; color: #fff; }
+    /* Ensure the 'Why choose LUXURTOUR' circle remains gold */
+    .why-icon { background: var(--gold) !important; width: 74px; height: 74px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+    .why-icon svg { color: #fff !important; width: 32px; height: 32px; }
     .why-item h3 { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
     .why-item p { font-size: .85rem; color: rgba(255,255,255,.55); line-height: 1.65; }
 
     /* EQUIPMENT */
     #equipment { background: #fff; }
     .eq-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 16px; max-width: 1200px; margin: 0 auto; }
-    .eq-card { background: var(--gray-light); border-radius: 12px; padding: 22px 18px; border: 1px solid var(--border); }
+    .eq-card { background: var(--gray-light); border-radius: 12px; padding: 22px 18px; border: 1px solid var(--border); text-align: left; }
     .eq-icon { width: 44px; height: 44px; background: #05301D; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
     .eq-icon svg { width: 22px; height: 22px; color: #fff; }
     .eq-card h4 { font-size: .875rem; font-weight: 700; margin-bottom: 10px; }
@@ -448,7 +557,7 @@
     /* FOOTER */
     footer { background: #05301D; padding: 60px 48px 28px; }
     .footer-top { display: grid; grid-template-columns: 1fr auto; gap: 40px; max-width: 1100px; margin: 0 auto 40px; }
-    .footer-brand-row { display: flex; align-items: center; gap: 10px; font-size: 1.35rem; font-weight: 800; letter-spacing: .12em; color: #D4AF37; margin-bottom: 14px; }
+    .footer-brand-row { display: flex; align-items: center; gap: 16px; font-size: 1.35rem; font-weight: 800; letter-spacing: .12em; color: #D4AF37; margin-bottom: 24px; }
     .footer-desc { font-size: .85rem; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 20px; }
     .socials { display: flex; gap: 16px; }
     .socials a { color: rgba(255,255,255,.5); transition: color .2s; line-height: 0; }
@@ -735,7 +844,7 @@
       .svc-body p { font-size: .76rem !important; line-height: 1.5 !important; }
       .svc-hint { font-size: .7rem !important; margin-top: 10px !important; }
       .svc-badge { width: 40px !important; height: 40px !important; border-radius: 9px !important; bottom: 10px !important; left: 10px !important; }
-      .svc-badge img { width: 30px !important; height: 30px !important; }
+      .svc-badge img { width: 40px !important; height: 40px !important; object-fit: contain !important; }
 
       /* Custom card */
       .svc-card-custom-body { padding: 22px 16px 20px !important; }
@@ -830,8 +939,8 @@
       /* Equipment */
       .eq-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
       .eq-card { padding: 12px 10px !important; border-radius: 9px !important; }
-      .eq-icon { width: 36px !important; height: 36px !important; border-radius: 8px !important; margin-bottom: 10px !important; }
-      .eq-icon svg { width: 18px !important; height: 18px !important; }
+      .eq-icon { width: 30px !important; height: 30px !important; border-radius: 7px !important; margin-bottom: 8px !important; }
+      .eq-icon svg { width: 15px !important; height: 15px !important; }
       .eq-card h4 { font-size: .75rem !important; margin-bottom: 7px !important; }
       .eq-card ul li { font-size: .68rem !important; }
 
@@ -1058,7 +1167,7 @@
 <nav class="green-texture">
   <div class="gt-grain" aria-hidden="true"></div>
   <a href="#hero" class="nav-logo">
-    <img src="luxurtour.png" height="32" alt="LUXURTOUR Logo"/>
+    <img src="luxurtour.png" height="20" alt="LUXURTOUR Logo"/>
     <span class="nav-logo-text"></span>
   </a>
   <ul class="nav-links">
@@ -1094,7 +1203,7 @@
 <section id="hero">
   <div class="hero-bg"></div>
   <div class="hero-content">
-    <div class="hero-brand"><img src="luxurtour.png" height="80" alt="LUXURTOUR Logo"/></div>
+    <div class="hero-brand"><img src="luxurtour.png" height="65" alt="LUXURTOUR Logo"/></div>
     <p class="hero-sub" data-i18n="hero_sub">Premium Visual Experiences</p>
     <p class="hero-desc" data-i18n="hero_desc">Elevate your property with stunning 360° photography, professional videos, and breathtaking drone footage tailored for exclusive clients and hotel owners</p>
     <a href="#services" class="btn-hero" data-i18n="hero_cta">Our Services</a>
@@ -1109,23 +1218,23 @@
   </div>
   <div class="services-grid">
     <div class="svc-card" onclick="openModal('svc360')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800&q=80" loading="lazy" decoding="async" alt="360° panoramic photography for luxury properties Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt=""/></div></div>
+      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800&q=80" loading="lazy" decoding="async" alt="360° panoramic photography for luxury properties Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt="360 icon"/></div></div>
       <div class="svc-body"><h3 data-i18n="svc1_title">360° Photography</h3><p data-i18n="svc1_desc">Immersive virtual tours that let guests explore every corner of your property before they arrive</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
     </div>
     <div class="svc-card" onclick="openModal('svcPhoto')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80" loading="lazy" decoding="async" alt="Professional real estate photography luxury property Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt=""/></div></div>
+      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80" loading="lazy" decoding="async" alt="Professional real estate photography luxury property Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt="Photo icon"/></div></div>
       <div class="svc-body"><h3 data-i18n="svc2_title">Professional Photography</h3><p data-i18n="svc2_desc">High-end photography that captures the essence and luxury of your property with stunning detail</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
     </div>
     <div class="svc-card" onclick="openModal('svcVideo')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=80" loading="lazy" decoding="async" alt="Cinematic real estate video production luxury property Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt=""/></div></div>
+      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=80" loading="lazy" decoding="async" alt="Cinematic real estate video production luxury property Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt="Video icon"/></div></div>
       <div class="svc-body"><h3 data-i18n="svc3_title">Video Production</h3><p data-i18n="svc3_desc">Cinematic videos that tell your property's story and create emotional connections with potential guests</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
     </div>
     <div class="svc-card" onclick="openModal('svcDrone')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=80" loading="lazy" decoding="async" alt="Aerial drone footage luxury real estate photography Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt=""/></div></div>
+      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=80" loading="lazy" decoding="async" alt="Aerial drone footage luxury real estate photography Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt="Drone icon"/></div></div>
       <div class="svc-body"><h3 data-i18n="svc4_title">Drone Footage</h3><p data-i18n="svc4_desc">Spectacular aerial perspectives showcasing your property's location, architecture, and surroundings</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
     </div>
     <div class="svc-card" onclick="openModal('svc3D')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80" loading="lazy" decoding="async" alt="3D virtual tour interactive real estate luxury property Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" alt="" style="width:60px;height:60px;"/></div></div>
+      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80" loading="lazy" decoding="async" alt="3D virtual tour interactive real estate luxury property Italy"/><div class="svc-badge"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACwALQDASIAAhEBAxEB/8QAHQABAQACAwEBAQAAAAAAAAAAAAgGBwQFCQECA//EADMQAAEDBAEDAgQGAQQDAAAAAAEAAgMEBQYRBwgSIRMxIjJBYQkUFSNRcYEzN3W0NUKC/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIyREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBERAREQEREBEXZjHr+adlSLHczBIwPZIKR/a5pGwQdaII87QdYi+va5ji17S1wOiCNEL4gIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICo3pM6iKrjyshxLLqmapxGd+opTt77Y8n5mj3MRPlzB7fM3z3NdOSIPXm8Y/h+aWyCW7Way5BRTRiSCSop46ljmOG2uY4gjRB2CP58LQHK3R5hN8gmrMFq5sauPaSyne909HI7z4IcS9mzry0kAezCp76fupHJOLcer8eqaX9ctZhe62QzSkfk6g+Ro+5iJJLmDXny0gl3diuP8AO3KFkzyszKmyepmrq+YSVtPP8dLUAezHRewaB8I7dFo8NIQY/wAocdZdxvfzZ8stUlJI4u/Lzt+KCpaNfFG/2cPI2PBGwHAHwsTXo1xxyBxz1N4DWYvkVshhukTBJV2yV/7kRHhtTTya2QC7XcPLSe1w04F8W9QfEt54kzR1orS+qtdV3S2yv7NNqIwRtp+gkbsBzfuD7OCDW6IiAiIgIiICIiAiIgIiICIiAiIgIubYbTcb7e6Ky2mlfV3CunZT00LNAySOIDRs+B5PufA+qq6m6VuPsRs9JU8t8qQWmsqx8ENPNFTR9w13Bj5gXSgbGyGt1sbA+oSIiovnPpllxDC3Z5g2SMynHGME03a1pkjhOtStewlszPPkjt0POiO4jl9KPT9iXLWCXS/5Bd73RVFHcnUjW0UkTWFgijfs97HHe3n6/wAIJpRWPF008C3uRttxfmdk91mPbBG26UVUXO/gRMDXO/oFaL584OyziKuhkuborlZKuQx0l0pmkMc8bPpyNPmOTQ3rZBAPa53a7QYBieQXjFMkocisFdLQ3OglEtPPGfLT7EEexaQSC0+CCQQQSvQp4x/qj6cS5jIqW5uB7QT/AOPuUTfbfk9h7v7Mcn0d7ecKpL8P3N5bBy5Nic8p/IZHTuY1p1ptTC1z2O2fbbfVboe5c3+Agna6UNXa7lVW24U76aspJnwVELxp0cjHFrmn7gghcZUJ174fHjfNzrzSQmOkyGkZWHTQGidpMcoH8k9rHn7yFT2gIiICIiAiIgIiICIiAiIgIt4410432/8ACEnKlHklsFCy3VVcaMxSerqnMgczetbPpnX9rRyDIOO8uu2CZjQ5XYvy36jQ+oYDUReowF8bmElv18OOvvpZTmFx5T5yyJ+US49dr/PTwx0ZdarZLJDA0bcGaYHBpJc53k+5KwG02243auZQWqgqq+rkDiyCmhdLI4NBJIa0EnQBJ+wK2LxvytyTwubhZLRDHa5KmaOeqprjb/3Nhvw7DtOALXA/0dhBTuH0lbxB0TX+38jVAo6u5U9bFQ2+aQGSN1TEWRU4G/mLu6RwG+0OcTrtdr+34dH+zOSf85J/14V+Le61dUnTndL3kVlpaHKbIaiGmq6fbRHOyJsrS0nZ9J4c1rmOLvqR5DSP3+HR/s1kn/OSf9eFBBg8HYV98LV1Xzh0e3qyZI99wuVKyotramd3c+WaKNktPK4+5c0uiBJ8u7CST3FQIr26Lmy4b0qX/KLqz0qWWprrpFs/PDHAxhP+XQvCCCVkPGl9ZjHImOZHKXiG2XSmqpez5ixkjXOA/nbQR/lY8iCletDlvAOVbbjT8Uq6+Wttc9Q2Rs9IYmmOVrPOz94x4+5U1IiAiIgIiICIiAiIgIiICIiC9vw/75R5LwnesKuBFR+m1ckUkDh4NLUtJA/y8TqJM8xysxDNLxjFwB/MWyskpnOLSO8NcQHgH6OGnD7ELYnSRyVHxry7R1dxn9KyXRv5C4ucfhja4gslPnQ7HgEn6NL9e63h+IBxNNU+lytYabv9ONlPe2MHntHwxVGvroajd58AR+NBxAS3xFm1Zx1yPZsxoadtTJbpi58Dndolie0skZvzoljnAHR0dHR1pVnn0PTVz5V02WVeejFr0IGR1InnjpJHtHs2VsoLXvaPAcxxGvG3ADUQogsnPOWeKeI+Ga/jTiC4vvdwr2TRzVrXF7Y3SNDHzvlAa18nboNEfgdo3oDTuX0FZtheNcVX2gyXLbHZqie8vkZDXV8UL3MMEQ7g1xBI2CN/YqK0QWRBxB0mWGVt1uXKn6vTQHufSG908olH8FtOwSn/AOSCsS6oeoi0ZVjDOOONaM0WLRtZHUVPoeiKiOMj04Yo9bjiHa0+QHHQGmgHvmREBERAREQEREBERAREQEREBERAREQFbnRrzpbsgsUHE+eyQPqmw/lLXPUgOjroCO0U0gd4LwPhbvw9um/MPjiNfWuc1wc0lrgdgg+QUFK9T3TLdcMq6zKcEpJ7li7tzS0jNyT24e5GveSIe4d5LR83t3unzFbBeMpyGix/H7fNcLnXSiKnp4h5cfckn2DQASXHQABJIAJVQ9P3VzWWeCmx3lBtRcqNgbHDeoh31EY9v32+8oA/9x8fjyHk7VR8X27ia53Ovzzj2nx+etucbY6ytt3b3EE9/a9o/wBNxJDnAhrnENLtlo0HmDmmMXvDslrMdyKhkorjRv7JI3+xH0c0+zmkeQ4eCDtdMvUDqO4UsfLmNdj/AE6HIKNh/Trj2+W/X05NeXRk/T3aTsfUO82M0xi+YdktZjuRUElDcaN/bLE/2I+jmn2c0jyHDwQUHTIiICIiAiIgIiICIiAiIgIiICIiAiIgIiIC5tlu91slwjuNludbba2P5KikndFI3+nNIIXCRBuLH+prmuzQR08eZSVsMY0G11JDO4/29ze8/wCXLH+WuXsp5QhpBllNZ5qmjd+zWU9EIpwzzuMuB8sJO9EeCNjWzvXqICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiIP/Z" alt="3D icon"/></div></div>
       <div class="svc-body"><h3 data-i18n="svc5_title">3D Virtual Tours</h3><p data-i18n="svc5_desc">Interactive 3D tours that allow guests to explore your property in an engaging and immersive way</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
     </div>
     <div class="svc-card-custom green-texture" onclick="openQuestionnaire('svcCustom','Custom Service')">
@@ -1381,9 +1490,8 @@
 
 <section id="clients" style="background:#fff;padding:64px 48px;text-align:center;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:.8rem;font-weight:700;letter-spacing:.15em;color:#D4AF37;text-transform:uppercase;margin-bottom:12px;" data-i18n="clients_label">Our Clients</p>
-    <h2 style="font-size:clamp(1.9rem,4vw,2.5rem);font-weight:800;color:#05301D;margin-bottom:16px;" data-i18n="clients_title">Who We Serve</h2>
-    <p style="font-size:1rem;color:#6b7280;line-height:1.75;margin-bottom:36px;max-width:640px;margin-left:auto;margin-right:auto;" data-i18n="clients_sub">We work with the finest properties and brands across Italy and Europe, delivering premium visual content that elevates every project.</p>
+    <p style="font-size:clamp(1.9rem,4vw,2.5rem);font-weight:800;color:#D4AF37;margin-bottom:16px;" data-i18n="clients_title" data-i18n="clients_label">Who We Serve</p>
+    <p style="font-size:1rem;color:#6b7280;line-height:1.75;margin-bottom:36px;max-width:640px;margin-left:auto;margin-right:auto;" data-i18n="clients_sub">We work with the finest properties and brands across Italy and Europe, delivering premium visual content that elevates every project</p>
     <button id="clients-toggle-btn" onclick="toggleClientsPanel()" style="display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#05301D;color:#D4AF37;font-family:inherit;font-size:.95rem;font-weight:700;letter-spacing:.04em;border:2px solid #05301D;border-radius:50px;cursor:pointer;transition:all .25s;margin-bottom:0;" onmouseover="this.style.background='transparent';this.style.color='#05301D';" onmouseout="if(!clientsPanelOpen){this.style.background='#05301D';this.style.color='#D4AF37';}">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span id="clients-btn-text" data-i18n="clients_btn">Discover Who We Work With</span>
@@ -1478,7 +1586,8 @@ function toggleClientsPanel() {
 
 <section id="why" class="green-texture">
   <div class="gt-grain" aria-hidden="true"></div>
-  <div class="sec-head"><h2 data-i18n="why_title">Why Choose LUXURTOUR</h2><p><span data-i18n="why_sub">We deliver excellence in every frame, tailored for the most discerning clients</span></p></div>
+  <div class="sec-head"><h2 data-i18n="why_title">Why Choose LUXURTOUR</h2><p></p></div>
+  <nbsp></nbsp>
   <div class="why-grid">
     <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div><h3 data-i18n="why1_title">Premium Quality</h3><p data-i18n="why1_desc">State-of-the-art equipment and expert techniques ensure the highest quality results</p></div>
     <div class="why-item"><div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3 data-i18n="why2_title">Exclusive Clientele</h3><p data-i18n="why2_desc">Specialized service for luxury hotels, resorts, and high-end properties</p></div>
@@ -1489,15 +1598,53 @@ function toggleClientsPanel() {
 
 <section id="equipment">
   <div class="sec-head"><h2 data-i18n="eq_title">Trusted Equipment &amp; Technology</h2><p><span data-i18n="eq_sub">Quality is non-negotiable in luxury visual content production. We exclusively use industry-leading equipment from the world's most trusted brands</span></p></div>
-  <div class="eq-grid">
-    <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h4 data-i18n="eq_cat_photo">Photography</h4><ul><li>Fujifilm</li><li>Canon</li><li>Nikon</li><li>Sony</li></ul></div>
-    <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg></div><h4 data-i18n="eq_cat_360">360° Technology</h4><ul><li>Insta360</li></ul></div>
-    <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M4.5 8.5l2 2M17.5 8.5l-2 2M4.5 15.5l2-2M17.5 15.5l-2-2"/><circle cx="4" cy="8" r="1.5"/><circle cx="20" cy="8" r="1.5"/><circle cx="4" cy="16" r="1.5"/><circle cx="20" cy="16" r="1.5"/></svg></div><h4 data-i18n="eq_cat_drone">Drones</h4><ul><li>DJI</li></ul></div>
-    <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="10" rx="2"/><polyline points="17 11 22 7 22 17 17 13"/></svg></div><h4 data-i18n="eq_cat_video">Video Production</h4><ul><li>Blackmagic Design</li><li>Sony</li><li>Fujifilm</li></ul></div>
-    <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div><h4 data-i18n="eq_cat_stab">Stabilization</h4><ul><li>DJI Ronin</li><li>Zhiyun</li></ul></div>
-    <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div><h4 data-i18n="eq_cat_light">Lighting</h4><ul><li>Aputure</li><li>Godox</li><li>Nanlite</li></ul></div>
+
+  <div style="max-width:1100px;margin:0 auto;text-align:center;">
+    <button id="equipment-toggle-btn" onclick="toggleEquipmentPanel()" style="display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#05301D;color:#D4AF37;font-family:inherit;font-size:.95rem;font-weight:700;letter-spacing:.04em;border:2px solid #05301D;border-radius:50px;cursor:pointer;transition:all .25s;margin-bottom:0;" onmouseover="this.style.background='transparent';this.style.color='#05301D';" onmouseout="if(!equipmentPanelOpen){this.style.background='#05301D';this.style.color='#D4AF37';}">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span id="equipment-btn-text" data-i18n="eq_btn">View Equipment &amp; Technology</span>
+      <svg id="equipment-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transition:transform .3s;"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <div id="equipment-panel" style="overflow:hidden;max-height:0;transition:max-height .45s cubic-bezier(.4,0,.2,1),opacity .35s ease,margin-top .35s ease;opacity:0;margin-top:0;">
+      <div style="padding-top:36px;max-width:1100px;margin:0 auto;">
+        <div class="eq-grid">
+          <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><h4 data-i18n="eq_cat_photo">Photography</h4><ul><li>Fujifilm</li><li>Canon</li><li>Nikon</li><li>Sony</li></ul></div>
+          <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/></svg></div><h4 data-i18n="eq_cat_360">360° Technology</h4><ul><li>Insta360</li></ul></div>
+          <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M4.5 8.5l2 2M17.5 8.5l-2 2M4.5 15.5l2-2M17.5 15.5l-2-2"/><circle cx="4" cy="8" r="1.5"/><circle cx="20" cy="8" r="1.5"/><circle cx="4" cy="16" r="1.5"/><circle cx="20" cy="16" r="1.5"/></svg></div><h4 data-i18n="eq_cat_drone">Drones</h4><ul><li>DJI</li></ul></div>
+          <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="15" height="10" rx="2"/><polyline points="17 11 22 7 22 17 17 13"/></svg></div><h4 data-i18n="eq_cat_video">Video Production</h4><ul><li>Blackmagic Design</li><li>Sony</li><li>Fujifilm</li></ul></div>
+          <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/></svg></div><h4 data-i18n="eq_cat_stab">Stabilization</h4><ul><li>DJI Ronin</li><li>Zhiyun</li></ul></div>
+          <div class="eq-card"><div class="eq-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></div><h4 data-i18n="eq_cat_light">Lighting</h4><ul><li>Aputure</li><li>Godox</li><li>Nanlite</li></ul></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+var equipmentPanelOpen = false;
+function toggleEquipmentPanel(){
+  var panel = document.getElementById('equipment-panel');
+  var chevron = document.getElementById('equipment-chevron');
+  var btn = document.getElementById('equipment-toggle-btn');
+  equipmentPanelOpen = !equipmentPanelOpen;
+  if(equipmentPanelOpen){
+    panel.style.maxHeight = panel.scrollHeight + 200 + 'px';
+    panel.style.opacity = '1';
+    panel.style.marginTop = '0';
+    chevron.style.transform = 'rotate(180deg)';
+    btn.style.background = 'transparent';
+    btn.style.color = '#05301D';
+  } else {
+    panel.style.maxHeight = '0';
+    panel.style.opacity = '0';
+    panel.style.marginTop = '0';
+    chevron.style.transform = 'rotate(0deg)';
+    btn.style.background = '#05301D';
+    btn.style.color = '#D4AF37';
+  }
+}
+</script>
 
 <section id="contact">
   <div class="sec-head"><h2 data-i18n="contact_title">Get In Touch</h2><p data-i18n="contact_sub">Ready to showcase your property in the best light? Let's discuss your project</p></div>
@@ -1521,12 +1668,12 @@ function toggleClientsPanel() {
   <div class="gt-grain" aria-hidden="true"></div>
   <div class="footer-top">
     <div>
-      <div class="footer-brand-row"><img src="luxurtour.png" height="40" alt="LUXURTOUR Logo"/></div>
+      <div class="footer-brand-row"><img src="luxurtour.png" height="30" alt="LUXURTOUR Logo"/></div>
       <p class="footer-desc" data-i18n="footer_desc">Premium 360° photography, professional videos, and drone footage for exclusive clients and luxury properties worldwide.</p>
       <div class="socials">
-        <a href="https://www.instagram.com/luxurtour" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="https://www.facebook.com/luxurtour" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
-        <a href="/cdn-cgi/l/email-protection#b0d9ded6dff0dcc5c8c5c2c4dfc5c29ed3dfdd" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+        <a href="" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></a>
+        <a href="" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
       </div>
     </div>
     <div style="display:flex; gap: 60px;">
@@ -1548,6 +1695,8 @@ function toggleClientsPanel() {
 <div class="q-overlay" id="q-overlay" onclick="qCloseOutside(event)">
   <div class="q-box">
     <div id="q-form-wrap">
+
+      <!-- Header -->
       <div class="q-header">
         <div class="q-header-text">
           <h3 data-i18n="q_header_title">Custom Project Brief</h3>
@@ -1558,169 +1707,205 @@ function toggleClientsPanel() {
           <button class="q-close" onclick="closeQuestionnaire()">✕</button>
         </div>
       </div>
-      <div class="q-body">
 
-        <p class="q-section-title" data-i18n="q_prop_info">Property Information</p>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_prop_name">Property Name</label>
-            <input type="text" id="q-prop-name" data-i18n-ph="q_prop_name_ph" placeholder="e.g. Villa Rossi"/>
-          </div>
-          <div class="q-field">
-            <label data-i18n="q_prop_type">Property Type</label>
-            <select id="q-prop-type">
-              <option value="">Select type</option>
-              <option>Hotel &amp; Boutique Resort</option>
-              <option>Luxury Villa</option>
-              <option>Apartment / Penthouse</option>
-              <option>Private Home</option>
-              <option>Bed &amp; Breakfast (B&amp;B)</option>
-              <option>Real Estate Listing</option>
-              <option>Architecture / Interior Design Studio</option>
-              <option>Event Venue</option>
-              <option>Restaurant / Bar</option>
-              <option>Spa / Wellness Centre</option>
-              <option>Large Residential Complex</option>
-              <option>Other</option>
-            </select>
-          </div>
+      <!-- Step progress -->
+      <div class="q-progress-wrap">
+        <div class="q-progress-steps">
+          <div class="q-progress-step active" id="q-ps-0"><span>1</span><small>Property</small></div>
+          <div class="q-progress-step" id="q-ps-1"><span>2</span><small>Spaces</small></div>
+          <div class="q-progress-step" id="q-ps-2"><span>3</span><small>Content</small></div>
+          <div class="q-progress-step" id="q-ps-3"><span>4</span><small>Delivery</small></div>
         </div>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_email">Email Address</label>
-            <input type="email" id="q-email" data-i18n-ph="q_email_ph" placeholder="your@email.com"/>
-          </div>
-          <div class="q-field">
-            <label data-i18n="q_phone">Contact Number</label>
-            <input type="tel" id="q-phone" data-i18n-ph="q_phone_ph" placeholder="+39 000 000 0000"/>
-          </div>
-        </div>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_location">Location / Address</label>
-            <input type="text" id="q-location" data-i18n-ph="q_location_ph" placeholder="City, Region"/>
-          </div>
-          <div class="q-field">
-            <label data-i18n="q_total_sqm">Approximate Total Size (m²)</label>
-            <input type="number" id="q-total-sqm" placeholder="e.g. 450" min="1"/>
-          </div>
-        </div>
-
-        <hr class="q-divider"/>
-        <p class="q-section-title" data-i18n="q_areas_title">Areas &amp; Spaces</p>
-        <div class="q-field">
-          <label data-i18n="q_areas">Which areas / rooms should be covered?</label>
-          <textarea id="q-areas" data-i18n-ph="q_areas_ph" placeholder="e.g. Lobby, 12 guest rooms, rooftop terrace, restaurant, spa, outdoor pool area…"></textarea>
-        </div>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_rooms">Number of Distinct Spaces / Rooms</label>
-            <input type="number" id="q-rooms" placeholder="e.g. 18" min="1"/>
-          </div>
-          <div class="q-field">
-            <label data-i18n="q_area_sizes">Approx. Size of Each Area (m²)</label>
-            <input type="text" id="q-area-sizes" data-i18n-ph="q_area_sizes_ph" placeholder="e.g. rooms ~25m², lobby ~80m²"/>
-          </div>
-        </div>
-
-        <hr class="q-divider"/>
-        <p class="q-section-title" data-i18n="q_content_title">Type &amp; Quantity of Content</p>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_content_type">Content Types Needed</label>
-            <select id="q-content-type">
-              <option value="">Select</option>
-              <option>Photography only</option>
-              <option>Video only</option>
-              <option>360° / Virtual Tour only</option>
-              <option>Drone only</option>
-              <option>Photography + Video</option>
-              <option>Photography + Drone</option>
-              <option>Video + Drone</option>
-              <option>360° / Virtual Tour + Photography</option>
-              <option>360° / Virtual Tour + Video</option>
-              <option>360° / Virtual Tour + Drone</option>
-              <option>Full package (all types)</option>
-              <option>Custom mix</option>
-            </select>
-          </div>
-          <div class="q-field">
-            <label data-i18n="q_asset_qty">Estimated Number of Final Assets</label>
-            <input type="text" id="q-asset-qty" data-i18n-ph="q_asset_qty_ph" placeholder="e.g. 80 photos, 2 videos, 1 tour"/>
-          </div>
-        </div>
-        <!-- Video-only fields -->
-        <div id="q-video-fields" style="display:none; flex-direction:column; gap:20px;">
-          <div class="q-row">
-            <div class="q-field">
-              <label data-i18n="q_video_type">Type of Video</label>
-              <select id="q-video-type">
-                <option value="">Select</option>
-                <option>Property showcase / highlight reel</option>
-                <option>Brand story / corporate film</option>
-                <option>Social media reels (Instagram / TikTok)</option>
-                <option>Event coverage</option>
-                <option>Testimonial / interview</option>
-                <option>Aerial / drone cinematic</option>
-                <option>Virtual walkthrough</option>
-                <option>Mixed / multiple types</option>
-              </select>
-            </div>
-            <div class="q-field">
-              <label data-i18n="q_video_minutes">Total Minutes of Final Video</label>
-              <input type="number" id="q-video-minutes" placeholder="e.g. 3" min="1"/>
-            </div>
-          </div>
-        </div>
-
-        <hr class="q-divider"/>
-        <p class="q-section-title" data-i18n="q_usage_title">Usage &amp; Delivery</p>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_usage">Intended Use</label>
-            <select id="q-usage">
-              <option value="">Select</option>
-              <option>Website & OTA listings</option>
-              <option>Social media campaigns</option>
-              <option>Print & brochures</option>
-              <option>Press & PR</option>
-              <option>Investor / corporate presentation</option>
-              <option>All of the above</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="q-field">
-            <label data-i18n="q_delivery">Preferred Delivery Format</label>
-            <select id="q-delivery">
-              <option value="">Select</option>
-              <option>Web-optimised (JPEG / MP4)</option>
-              <option>High-res RAW files</option>
-              <option>Both web + RAW</option>
-              <option>Embed link (virtual tour)</option>
-              <option>Custom per asset type</option>
-            </select>
-          </div>
-        </div>
-        <div class="q-row">
-          <div class="q-field">
-            <label data-i18n="q_timeline">Desired Deadline / Timeline</label>
-            <input type="text" id="q-timeline" data-i18n-ph="q_timeline_ph" placeholder="e.g. within 3 weeks, by June 15"/>
-          </div>
-        </div>
-
-        <hr class="q-divider"/>
-        <p class="q-section-title" data-i18n="q_notes_title">Special Requirements</p>
-        <div class="q-field">
-          <label><span data-i18n="q_notes">Any special requests, access restrictions, or additional notes? </span> <span data-i18n="q_optional" style="font-weight:400;color:var(--gray-text);font-size:.75rem;">(Optional)</span></label>
-          <textarea id="q-notes" data-i18n-ph="q_notes_ph" placeholder="e.g. Shoot must happen during off-peak hours, certain areas are restricted, need drone permit assistance…"></textarea>
-        </div>
-
+        <div class="q-progress-bar"><div class="q-progress-fill" id="q-progress-fill"></div></div>
       </div>
+
+      <!-- Steps slider -->
+      <div class="q-steps-viewport">
+        <div class="q-steps" id="q-steps">
+
+          <!-- Step 1: Property Information -->
+          <div class="q-step">
+            <div class="q-body">
+              <p class="q-section-title" data-i18n="q_prop_info">Property Information</p>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_prop_name">Property Name <span>*</span></label>
+                  <input type="text" id="q-prop-name" data-i18n-ph="q_prop_name_ph" placeholder="e.g. Villa Rossi"/>
+                </div>
+                <div class="q-field">
+                  <label data-i18n="q_prop_type">Property Type <span>*</span></label>
+                  <select id="q-prop-type">
+                    <option value="">Select type</option>
+                    <option>Hotel &amp; Boutique Resort</option>
+                    <option>Luxury Villa</option>
+                    <option>Apartment / Penthouse</option>
+                    <option>Private Home</option>
+                    <option>Bed &amp; Breakfast (B&amp;B)</option>
+                    <option>Real Estate Listing</option>
+                    <option>Architecture / Interior Design Studio</option>
+                    <option>Event Venue</option>
+                    <option>Restaurant / Bar</option>
+                    <option>Spa / Wellness Centre</option>
+                    <option>Large Residential Complex</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+              </div>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_email">Email Address <span>*</span></label>
+                  <input type="email" id="q-email" data-i18n-ph="q_email_ph" placeholder="your@email.com"/>
+                </div>
+                <div class="q-field">
+                  <label data-i18n="q_phone">Contact Number <span>*</span></label>
+                  <input type="tel" id="q-phone" data-i18n-ph="q_phone_ph" placeholder="+39 000 000 0000"/>
+                </div>
+              </div>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_location">Location / Address <span>*</span></label>
+                  <input type="text" id="q-location" data-i18n-ph="q_location_ph" placeholder="City, Region"/>
+                </div>
+                <div class="q-field">
+                  <label data-i18n="q_total_sqm">Approximate Total Size (m²)</label>
+                  <input type="number" id="q-total-sqm" placeholder="e.g. 450" min="1"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Areas & Spaces -->
+          <div class="q-step">
+            <div class="q-body">
+              <p class="q-section-title" data-i18n="q_areas_title">Areas &amp; Spaces</p>
+              <div class="q-field">
+                <label data-i18n="q_areas">Which areas / rooms should be covered? <span>*</span></label>
+                <textarea id="q-areas" data-i18n-ph="q_areas_ph" placeholder="e.g. Lobby, 12 guest rooms, rooftop terrace, restaurant, spa, outdoor pool area…"></textarea>
+              </div>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_rooms">Number of Distinct Spaces / Rooms <span>*</span></label>
+                  <input type="number" id="q-rooms" placeholder="e.g. 18" min="1"/>
+                </div>
+                <div class="q-field">
+                  <label data-i18n="q_area_sizes">Approx. Size of Each Area (m²)</label>
+                  <input type="text" id="q-area-sizes" data-i18n-ph="q_area_sizes_ph" placeholder="e.g. rooms ~25m², lobby ~80m²"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: Content -->
+          <div class="q-step">
+            <div class="q-body">
+              <p class="q-section-title" data-i18n="q_content_title">Type &amp; Quantity of Content</p>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_content_type">Content Types Needed <span>*</span></label>
+                  <select id="q-content-type" onchange="qCheckVideoFields()">
+                    <option value="">Select</option>
+                    <option>Photography only</option>
+                    <option>Video only</option>
+                    <option>360° / Virtual Tour only</option>
+                    <option>Drone only</option>
+                    <option>Photography + Video</option>
+                    <option>Photography + Drone</option>
+                    <option>Video + Drone</option>
+                    <option>360° / Virtual Tour + Photography</option>
+                    <option>360° / Virtual Tour + Video</option>
+                    <option>360° / Virtual Tour + Drone</option>
+                    <option>Full package (all types)</option>
+                    <option>Custom mix</option>
+                  </select>
+                </div>
+                <div class="q-field">
+                  <label data-i18n="q_asset_qty">Estimated Number of Final Assets <span>*</span></label>
+                  <input type="text" id="q-asset-qty" data-i18n-ph="q_asset_qty_ph" placeholder="e.g. 80 photos, 2 videos, 1 tour"/>
+                </div>
+              </div>
+              <div id="q-video-fields" style="display:none; flex-direction:column; gap:16px;">
+                <div class="q-row">
+                  <div class="q-field">
+                    <label data-i18n="q_video_type">Type of Video</label>
+                    <select id="q-video-type">
+                      <option value="">Select</option>
+                      <option>Property showcase / highlight reel</option>
+                      <option>Brand story / corporate film</option>
+                      <option>Social media reels (Instagram / TikTok)</option>
+                      <option>Event coverage</option>
+                      <option>Testimonial / interview</option>
+                      <option>Aerial / drone cinematic</option>
+                      <option>Virtual walkthrough</option>
+                      <option>Mixed / multiple types</option>
+                    </select>
+                  </div>
+                  <div class="q-field">
+                    <label data-i18n="q_video_minutes">Total Minutes of Final Video</label>
+                    <input type="number" id="q-video-minutes" placeholder="e.g. 3" min="1"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Usage & Delivery -->
+          <div class="q-step">
+            <div class="q-body">
+              <p class="q-section-title" data-i18n="q_usage_title">Usage &amp; Delivery</p>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_usage">Intended Use <span>*</span></label>
+                  <select id="q-usage">
+                    <option value="">Select</option>
+                    <option>Website &amp; OTA listings</option>
+                    <option>Social media campaigns</option>
+                    <option>Print &amp; brochures</option>
+                    <option>Press &amp; PR</option>
+                    <option>Investor / corporate presentation</option>
+                    <option>All of the above</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <div class="q-field">
+                  <label data-i18n="q_delivery">Preferred Delivery Format <span>*</span></label>
+                  <select id="q-delivery">
+                    <option value="">Select</option>
+                    <option>Web-optimised (JPEG / MP4)</option>
+                    <option>High-res RAW files</option>
+                    <option>Both web + RAW</option>
+                    <option>Embed link (virtual tour)</option>
+                    <option>Custom per asset type</option>
+                  </select>
+                </div>
+              </div>
+              <div class="q-row">
+                <div class="q-field">
+                  <label data-i18n="q_timeline">Desired Deadline / Timeline <span>*</span></label>
+                  <input type="text" id="q-timeline" data-i18n-ph="q_timeline_ph" placeholder="e.g. within 3 weeks, by June 15"/>
+                </div>
+              </div>
+              <hr class="q-divider"/>
+              <p class="q-section-title" data-i18n="q_notes_title">Special Requirements</p>
+              <div class="q-field">
+                <label><span data-i18n="q_notes">Any special requests, access restrictions, or additional notes?</span> <span style="font-weight:400;color:var(--gray-text);font-size:.75rem;" data-i18n="q_optional">(Optional)</span></label>
+                <textarea id="q-notes" data-i18n-ph="q_notes_ph" placeholder="e.g. Shoot must happen during off-peak hours, certain areas are restricted, need drone permit assistance…"></textarea>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end q-steps -->
+      </div><!-- end q-steps-viewport -->
+
+      <!-- Footer nav -->
       <div class="q-footer">
-        <button class="q-btn-send" data-i18n="q_btn_send" onclick="submitQuestionnaire('send')">📩 Send Brief</button>
-        <button class="q-btn-reserve" data-i18n="q_btn_reserve" onclick="submitQuestionnaire('reserve')">✅ Send &amp; Reserve</button>
+        <button class="q-btn-prev" id="q-prev" onclick="prevQuestionnaireStep()" style="display:none;">← Back</button>
+        <button class="q-btn-next" id="q-next" onclick="nextQuestionnaireStep()">Next →</button>
+        <button class="q-btn-send" id="q-send" data-i18n="q_btn_send" onclick="submitQuestionnaire('send')" style="display:none;">📩 Send Brief</button>
+        <button class="q-btn-reserve" id="q-reserve" data-i18n="q_btn_reserve" onclick="submitQuestionnaire('reserve')" style="display:none;">✅ Send &amp; Reserve</button>
       </div>
-    </div>
+
+    </div><!-- end q-form-wrap -->
+
     <div class="q-success" id="q-success">
       <div class="q-success-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
       <h4 id="q-success-title">Brief Sent!</h4>
@@ -1739,47 +1924,124 @@ function closeMenu(){document.getElementById('mobileMenu').classList.remove('ope
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); document.getElementById('hamburger').classList.toggle('open'); }
 function closeMenu() { document.getElementById('mobileMenu').classList.remove('open'); document.getElementById('hamburger').classList.remove('open'); }
 
-function openQuestionnaire(svcId, svcName) {
+// ...existing code...
+// Consolidated questionnaire handlers (single implementation)
+var qCurrentStep = 0;
+var qTotalSteps = 0;
+function initQuestionnaire(){
+  var steps = document.querySelectorAll('.q-step');
+  qTotalSteps = steps ? steps.length : 4;
+}
+initQuestionnaire();
 
-  ['q-prop-name','q-prop-type','q-email','q-phone','q-location','q-total-sqm','q-areas','q-rooms','q-area-sizes',
-   'q-content-type','q-asset-qty','q-usage','q-delivery','q-timeline','q-notes','q-video-type','q-video-minutes'
-  ].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  document.getElementById('q-success').classList.remove('show');
-  document.getElementById('q-form-wrap').style.display = 'block';
-  document.getElementById('q-service-badge').textContent = svcName + ' — Exclusive';
+function openQuestionnaire(svcId, svcName){
+  // clear common fields
+  ['q-prop-name','q-prop-type','q-email','q-phone','q-location','q-total-sqm',
+   'q-areas','q-rooms','q-area-sizes','q-content-type','q-asset-qty',
+   'q-usage','q-delivery','q-timeline','q-notes','q-video-type','q-video-minutes'
+  ].forEach(function(id){ var el=document.getElementById(id); if(el) el.value = ''; });
 
-  const videoFields = document.getElementById('q-video-fields');
-  videoFields.style.display = svcId === 'svcVideo' ? 'flex' : 'none';  document.getElementById('q-overlay').classList.add('open');
+  var vf = document.getElementById('q-video-fields'); if(vf) vf.style.display = 'none';
+  var form = document.getElementById('q-form-wrap'); if(form) form.style.display = 'block';
+  var success = document.getElementById('q-success'); if(success) success.classList.remove('show');
+  var badge = document.getElementById('q-service-badge'); if(badge) badge.textContent = svcName ? (svcName + ' — Exclusive') : '';
+  var overlay = document.getElementById('q-overlay'); if(overlay) overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+  qCurrentStep = 0;
+  initQuestionnaire();
+  showQuestionnaireStep(0);
 }
-function closeQuestionnaire() {
-  document.getElementById('q-overlay').classList.remove('open');
-  document.body.style.overflow = '';
+
+function closeQuestionnaire(){ var overlay = document.getElementById('q-overlay'); if(overlay) overlay.classList.remove('open'); document.body.style.overflow = ''; }
+function qCloseOutside(e){ if(e.target === e.currentTarget) closeQuestionnaire(); }
+
+function showQuestionnaireStep(n){
+  initQuestionnaire();
+  qCurrentStep = Math.max(0, Math.min(qTotalSteps - 1, n));
+  var stepsEl = document.getElementById('q-steps'); if(stepsEl) stepsEl.style.transform = 'translateX(' + (-100 * qCurrentStep) + '%)';
+
+  var fill = document.getElementById('q-progress-fill'); if(fill) fill.style.width = ((qCurrentStep + 1) / qTotalSteps * 100) + '%';
+  for(var i=0;i<qTotalSteps;i++){
+    var ps = document.getElementById('q-ps-' + i);
+    if(!ps) continue;
+    ps.classList.remove('active','done');
+    if(i < qCurrentStep) ps.classList.add('done');
+    else if(i === qCurrentStep) ps.classList.add('active');
+  }
+
+  // buttons
+  var prevBtn = document.getElementById('q-prev'); var nextBtn = document.getElementById('q-next');
+  var sendBtn = document.getElementById('q-send'); var reserveBtn = document.getElementById('q-reserve');
+  if(prevBtn) prevBtn.style.display = qCurrentStep === 0 ? 'none' : 'inline-flex';
+  var isLast = qCurrentStep === qTotalSteps - 1;
+  if(nextBtn) nextBtn.style.display = isLast ? 'none' : 'inline-flex';
+  if(sendBtn) sendBtn.style.display = isLast ? 'inline-flex' : 'none';
+  if(reserveBtn) reserveBtn.style.display = isLast ? 'inline-flex' : 'none';
+
+  // optional display toggle for video fields
+  var contentTypeEl = document.getElementById('q-content-type');
+  var videoSection = document.getElementById('q-video-fields');
+  if(contentTypeEl && videoSection){
+    var val = (contentTypeEl.value || '').toLowerCase();
+    var needsVideo = /video|drone|full package|mixed|virtual walkthrough|all types/i.test(val);
+    // show video fields only when appropriate
+    videoSection.style.display = needsVideo ? 'flex' : 'none';
+  }
+
+  // scroll to top of the box
+  var box = document.querySelector('.q-box'); if(box) box.scrollTop = 0;
 }
-function qCloseOutside(e) {
-  if (e.target === e.currentTarget) closeQuestionnaire();
+
+function qCheckVideoFields(){
+  var val = (document.getElementById('q-content-type') || {}).value || '';
+  var needs = /video|drone|full package|mixed|virtual walkthrough|all types/i.test(val.toLowerCase());
+  var vf = document.getElementById('q-video-fields'); if(vf) vf.style.display = needs ? 'flex' : 'none';
 }
-function submitQuestionnaire(action) {
-  const required = ['q-prop-name','q-prop-type','q-email','q-phone','q-location','q-total-sqm','q-areas','q-rooms','q-area-sizes','q-content-type','q-asset-qty','q-usage','q-delivery','q-timeline'];
-  const videoFields = document.getElementById('q-video-fields');
-  if (videoFields.style.display !== 'none') required.push('q-video-type','q-video-minutes');
-  const missing = required.filter(id => !document.getElementById(id).value.trim());
-  if (missing.length) { alert('Please fill in all required fields.'); return; }
-  document.getElementById('q-form-wrap').style.display = 'none';
-  const success = document.getElementById('q-success');
-  success.classList.add('show');
-  const t = translations[currentLang] || translations.en;
-  if (action === 'reserve') {
-    document.getElementById('q-success-title').textContent = t.q_success_reserve_title;
-    document.getElementById('q-success-msg').textContent = t.q_success_reserve_msg;
+
+function nextQuestionnaireStep(){
+  if(!validateStep(qCurrentStep)){
+    alert('Please fill the required fields on this step.');
+    return;
+  }
+  showQuestionnaireStep(qCurrentStep + 1);
+}
+function prevQuestionnaireStep(){ showQuestionnaireStep(qCurrentStep - 1); }
+
+function validateStep(step){
+  // Minimal required fields per step so optional fields don't block progress
+  var map = {
+    0: ['q-prop-name','q-email'],
+    1: [],
+    2: ['q-content-type','q-asset-qty'],
+    3: ['q-usage','q-delivery']
+  };
+  var required = map[step] || [];
+  // if video fields are visible on step 2, include them
+  if(step === 2){ var vf = document.getElementById('q-video-fields'); if(vf && vf.style.display !== 'none'){ required = required.concat(['q-video-type','q-video-minutes']); } }
+  var missing = required.filter(function(id){ var el = document.getElementById(id); return !el || !String(el.value || '').trim(); });
+  return missing.length === 0;
+}
+
+function submitQuestionnaire(action){
+  // final validation: only enforce the minimal required fields across steps
+  var required = ['q-prop-name','q-email','q-content-type','q-asset-qty','q-usage','q-delivery'];
+  var vf = document.getElementById('q-video-fields'); if(vf && vf.style.display !== 'none'){ required.push('q-video-type','q-video-minutes'); }
+  var missing = required.filter(function(id){ var el = document.getElementById(id); return !el || !String(el.value || '').trim(); });
+  if(missing.length){ alert('Please fill all required fields before sending.'); return; }
+
+  var form = document.getElementById('q-form-wrap'); if(form) form.style.display = 'none';
+  var success = document.getElementById('q-success'); if(success) success.classList.add('show');
+  var t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : (typeof translations !== 'undefined' ? translations.en : {});
+  if(action === 'reserve'){
+    document.getElementById('q-success-title').textContent = t.q_success_reserve_title || 'Reservation Confirmed!';
+    document.getElementById('q-success-msg').textContent = t.q_success_reserve_msg || 'We will contact you shortly to finalise your reservation.';
   } else {
-    document.getElementById('q-success-title').textContent = t.q_success_send_title;
-    document.getElementById('q-success-msg').textContent = t.q_success_send_msg;
+    document.getElementById('q-success-title').textContent = t.q_success_send_title || 'Brief Sent!';
+    document.getElementById('q-success-msg').textContent = t.q_success_send_msg || "Thank you — we'll be in touch within 24 hours.";
   }
 }
+
+// ...existing code...
 
 function openModal(id) {
   const overlay = document.getElementById('modal-' + id);
@@ -1916,17 +2178,47 @@ function toggleStorage(id) {
   }, 0);
 }
 
+// ...existing code...
 function getTravelCost(id) {
   const sel = document.getElementById('bregion-' + id);
   if (!sel || !sel.value) return 0;
   const region = REGIONS.find(r => r.name === sel.value);
-  return region ? TRAVEL_COSTS[region.tier] : 0;
+  if (!region || typeof region.tier === 'undefined' || region.tier === null) return 0;
+  const raw = TRAVEL_COSTS && Object.prototype.hasOwnProperty.call(TRAVEL_COSTS, region.tier) ? TRAVEL_COSTS[region.tier] : 0;
+  const cost = Number(raw) || 0;
+  return cost;
+}
+
+function onRegionChange(id) {
+  const sel = document.getElementById('bregion-' + id);
+  if (!sel) return;
+  const region = REGIONS.find(r => r.name === sel.value);
+  const notice = document.getElementById('travel-notice-' + id);
+  const noticeText = document.getElementById('travel-notice-text-' + id);
+  if (region && typeof region.tier !== 'undefined' && region.tier > 0) {
+    const cost = getTravelCost(id);
+    const t = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : (typeof translations !== 'undefined' ? translations.en : {});
+    const labelKey = TRAVEL_LABEL_KEYS[region.tier] || 'travel_intercontinental';
+    const label = t[labelKey] || labelKey;
+    const travelFromRome = t.travel_from_rome || 'from Rome';
+    const travelSurcharge = t.travel_surcharge || 'Travel surcharge';
+    const travelWorking = t.travel_working || 'We operate in';
+    const travelRequires = t.travel_requires || 'Requires additional travel fee';
+    const costDisplay = cost ? ('+€' + cost) : t.travel_free || '+€0';
+    noticeText.innerHTML = '<strong>' + travelSurcharge + '</strong> ' + travelWorking + ' ' + region.name + ' (' + label + ' ' + travelFromRome + ') ' + travelRequires + ' <strong>' + costDisplay + '</strong>.';
+    notice.classList.add('show');
+  } else if (notice) {
+    notice.classList.remove('show');
+  }
+  updateFeeSummary(id);
+  updateConfirmBtn(id);
 }
 
 function updateFeeSummary(id) {
-  const travel = getTravelCost(id);
-  const storage = document.getElementById('bstorage-' + id).checked ? STORAGE_FEE : 0;
+  const travel = getTravelCost(id) || 0;
+  const storage = (document.getElementById('bstorage-' + id) && document.getElementById('bstorage-' + id).checked) ? STORAGE_FEE : 0;
   const container = document.getElementById('fee-summary-' + id);
+  if (!container) return;
   if (travel === 0 && storage === 0) { container.innerHTML = ''; return; }
   let html = '';
   if (travel > 0) html += '<div class="fee-row"><span>Travel surcharge</span><span>+€' + travel + '</span></div>';
@@ -1934,6 +2226,7 @@ function updateFeeSummary(id) {
   html += '<div class="fee-row total"><span>Extra charges total</span><span>+€' + (travel + storage) + '</span></div>';
   container.innerHTML = html;
 }
+// ...existing code...
 
 function updateConfirmBtn(id) {
   const name = document.getElementById('bname-' + id).value.trim();
