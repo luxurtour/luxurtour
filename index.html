@@ -246,20 +246,152 @@
     .sec-head { text-align: center; margin-bottom: 60px; }
     .sec-head h2 { font-size: clamp(1.9rem, 4vw, 2.7rem); font-weight: 700; margin-bottom: 14px; }
     .sec-head p { font-size: 1rem; color: var(--gray-text); max-width: 580px; margin: 0 auto; line-height: 1.7; }
-    #services { background: var(--gray-bg); }
-    .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 1200px; margin: 0 auto; }
-    .svc-card { background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); transition: box-shadow .25s, transform .25s; cursor: pointer; }
-    .svc-card:hover { box-shadow: 0 16px 48px rgba(0,0,0,.09); transform: translateY(-4px); }
-    .svc-img { position: relative; height: 240px; overflow: hidden; }
-    .svc-img img.cover { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
-    .svc-card:hover .svc-img img.cover { transform: scale(1.04); }
-    .svc-badge { position: absolute; bottom: 14px; left: 14px; width: 52px; height: 52px; background: #000; border: 1px solid rgba(255,255,255,.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .svc-badge img { width: 35px; height: 35px; object-fit: contain; display: block; }
-    .svc-body { padding: 24px 26px; }
-    .svc-body h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
-    .svc-body p { font-size: .875rem; color: var(--gray-text); line-height: 1.65; }
-    .svc-hint { display: flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 600; color: var(--gold); margin-top: 14px; letter-spacing: .03em; }
-    .svc-hint svg { width: 14px; height: 14px; }
+    #services { background: #fff; overflow: visible; padding: 0; }
+    #services .sec-head { padding: 80px 48px 60px; }
+
+    /* ── OMGLOBAL SCROLL STACK ── */
+    /* Outer wrapper creates the scroll height (JS sets this) */
+    .svc-scroll-track {
+      position: relative;
+    }
+
+    /* Sticky container that holds all the cards */
+    .svc-sticky-stage {
+      position: sticky;
+      top: 70px; /* nav height */
+      height: calc(100vh - 70px);
+      overflow: hidden;
+    }
+
+    /* Each card occupies the full stage, absolutely stacked */
+    .svc-row {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      will-change: transform;
+      /* starts off-screen below, JS sets translateY */
+    }
+
+    /* Alternate image side */
+    .svc-row:nth-child(even) .svc-row-img   { order: 2; }
+    .svc-row:nth-child(even) .svc-row-content { order: 1; }
+
+    .svc-row-img {
+      position: relative;
+      overflow: hidden;
+    }
+    .svc-row-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    /* Desktop: icon overlaid on the image, bottom-left */
+    .svc-row-img-icon {
+      position: absolute;
+      bottom: 28px;
+      left: 28px;
+      z-index: 4;
+      width: 60px;
+      height: 60px;
+      background: #000;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+    .svc-row-img-icon img {
+      position: static !important;
+      inset: auto !important;
+      width: 44px !important;
+      height: 44px !important;
+      object-fit: cover;
+      
+    }
+
+    .svc-row-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 64px 72px;
+      background: #fff;
+    }
+    .svc-row:nth-child(even) .svc-row-content { background: var(--gray-bg); }
+
+    .svc-row-label {
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+    .svc-row-content h3 {
+      font-size: clamp(1.5rem, 2.2vw, 2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      color: #1a1a1a;
+      margin-bottom: 18px;
+      letter-spacing: -.01em;
+    }
+    .svc-row-content p {
+      font-size: 1rem;
+      color: var(--gray-text);
+      line-height: 1.75;
+      margin-bottom: 36px;
+      max-width: 440px;
+    }
+    .svc-row-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: #05301D;
+      color: #fff;
+      font-size: .9rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background .2s, gap .2s;
+      text-decoration: none;
+      width: fit-content;
+    }
+    .svc-row-btn:hover { background: var(--gold); gap: 16px; }
+    .svc-row-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+
+
+    /* Progress dots */
+    .svc-progress {
+      position: fixed;
+      right: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: none; /* shown by JS when section is active */
+      flex-direction: column;
+      gap: 10px;
+      z-index: 50;
+    }
+    .svc-progress.visible { display: flex; }
+    .svc-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background .3s, transform .3s;
+      cursor: pointer;
+    }
+    .svc-dot.active { background: var(--dark); transform: scale(1.4); }
+    .deck-hint { display:none; }
+    .deck-counter { display:none; }
 
     /* MODAL */
     .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(4px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 24px; opacity: 0; pointer-events: none; transition: opacity .25s; }
@@ -271,7 +403,7 @@
     .modal-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.1), rgba(0,0,0,.55)); display: flex; align-items: flex-end; padding: 24px 28px; }
     .modal-hero-title { display: flex; align-items: center; gap: 14px; }
     .modal-hero-icon { width: 52px; height: 52px; background: #000; border: 1px solid rgba(255,255,255,.25); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; }
-    .modal-hero-icon img { width: 40px; height: 40px; object-fit: cover; display: block; }
+    .modal-hero-icon img { width: 40px; height: 40px; object-fit: cover; display: block;  }
     .modal-hero-title h2 { font-size: 1.5rem; font-weight: 800; color: #fff; }
     .modal-close { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; background: rgba(0,0,0,.4); backdrop-filter: blur(4px); border: none; border-radius: 50%; color: #fff; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; transition: background .2s; z-index: 10; }
     .modal-close:hover { background: rgba(0,0,0,.7); }
@@ -300,7 +432,8 @@
 
     /* CUSTOM SERVICE CARD */
     .svc-card-custom { background: linear-gradient(135deg, #05301D 0%, #0a4a2a 60%, #0d5c34 100%); border-radius: 14px; border: 1.5px solid rgba(212,175,55,.3); transition: box-shadow .25s, transform .25s; cursor: pointer; display: flex; flex-direction: column; overflow: hidden; position: relative; }
-    .svc-card-custom:hover { box-shadow: 0 16px 48px rgba(212,175,55,.18); transform: translateY(-4px); border-color: var(--gold); }
+    .svc-card-custom:hover { box-shadow: 0 16px 48px rgba(212,175,55,.18); border-color: var(--gold); }
+    .services-grid .svc-card-custom:not(.deck-top):hover { transform: none !important; }
     .svc-card-custom-body { padding: 36px 32px 32px; display: flex; flex-direction: column; flex: 1; position: relative; z-index: 1; }
     .svc-card-custom-icon { width: 56px; height: 56px; background: rgba(212,175,55,.15); border: 1.5px solid rgba(212,175,55,.4); border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
     .svc-card-custom-icon svg { width: 28px; height: 28px; color: var(--gold); }
@@ -573,7 +706,7 @@
     /* RESPONSIVE */
     @media(max-width:1000px) {
       nav { padding: 0 24px; } section { padding: 70px 24px; } footer { padding: 48px 24px 24px; }
-      .services-grid, .contact-grid, .footer-top { grid-template-columns: 1fr; }
+      .contact-grid, .footer-top { grid-template-columns: 1fr; }
       .why-grid { grid-template-columns: 1fr 1fr; gap: 36px; }
       .eq-grid { grid-template-columns: repeat(3,1fr); }
       .packs-grid { grid-template-columns: 1fr; }
@@ -585,7 +718,7 @@
       #hero { min-height: 100svh; padding-top: 64px; } #services, #why, #equipment, #contact { scroll-margin-top: 64px; }
       .hero-brand img { height: 48px !important; } .hero-sub { font-size: 1rem; } .hero-desc { font-size: .9rem; margin-bottom: 28px; } .btn-hero { padding: 14px 36px; }
       section { padding: 60px 20px; } .sec-head { margin-bottom: 40px; } .sec-head h2 { font-size: clamp(1.6rem, 6vw, 2.2rem); }
-      .services-grid { grid-template-columns: 1fr; gap: 16px; } .svc-img { height: 200px; }
+      /* services-grid is a stacked deck - no grid override needed */ .svc-img { height: 200px; }
       .why-grid { grid-template-columns: 1fr 1fr; gap: 32px; } .why-icon { width: 60px; height: 60px; }
       .eq-grid { grid-template-columns: repeat(2,1fr); gap: 12px; } .eq-card { padding: 16px 14px; }
       .contact-grid { grid-template-columns: 1fr; } .form-card { padding: 28px 20px; } .form-row { grid-template-columns: 1fr; gap: 12px; }
@@ -599,14 +732,188 @@
       .why-grid { grid-template-columns: 1fr; gap: 28px; }
       #clients .clients-grid { grid-template-columns: 1fr 1fr !important; }
     }
+    /* ═══════════════════════════════════════════════════
+       DESKTOP FULLSCREEN MODAL (> 768px)
+       Left = image + service info overlay
+       Right = pack cards + booking (scrollable)
+    ═══════════════════════════════════════════════════ */
+    @media (min-width: 769px) {
+      /* Backdrop fades in */
+      .modal-overlay {
+        background: rgba(0,0,0,0) !important;
+        backdrop-filter: none !important;
+        padding: 0 !important;
+        align-items: stretch !important;
+        justify-content: flex-end !important;
+        transition: background .45s ease !important;
+      }
+      .modal-overlay.open {
+        background: rgba(0,0,0,.65) !important;
+      }
+
+      /* Full-screen two-column panel slides from right */
+      .modal {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        display: grid !important;
+        grid-template-columns: 45% 55% !important;
+        grid-template-rows: 1fr !important;
+        transform: translateX(100%) !important;
+        transition: transform .48s cubic-bezier(.4,0,.2,1) !important;
+        overflow: hidden !important;
+        position: relative !important;
+      }
+      .modal-overlay.open .modal {
+        transform: translateX(0) !important;
+      }
+
+      /* ── LEFT COLUMN: full-height image ── */
+      .modal-hero {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
+        height: 100vh !important;
+        border-radius: 0 !important;
+        position: relative !important;
+        overflow: hidden !important;
+      }
+      .modal-hero > img {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+      }
+      /* Gradient covers bottom ~60% for text legibility */
+      .modal-hero-overlay {
+        position: absolute !important;
+        inset: 0 !important;
+        background: linear-gradient(to bottom,
+          rgba(0,0,0,.05) 0%,
+          rgba(0,0,0,.18) 30%,
+          rgba(0,0,0,.72) 65%,
+          rgba(0,0,0,.88) 100%) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-end !important;
+        padding: 44px 40px !important;
+        gap: 0 !important;
+      }
+      /* Service title row (icon + name) stays at bottom */
+      .modal-hero-title {
+        display: flex !important;
+        align-items: center !important;
+        gap: 14px !important;
+        margin-bottom: 20px !important;
+      }
+      .modal-hero-title h2 {
+        font-size: 2rem !important;
+        color: #fff !important;
+      }
+      .modal-hero-icon {
+        width: 58px !important;
+        height: 58px !important;
+        border-radius: 14px !important;
+        flex-shrink: 0 !important;
+        background: #000 !important;
+      }
+      .modal-hero-icon img {
+        width: 44px !important;
+        height: 44px !important;
+      }
+
+      /* Info panel injected into overlay by JS */
+      .modal-hero-info {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        margin-bottom: 28px !important;
+      }
+      .modal-hero-info .mhi-label {
+        font-size: .68rem !important;
+        font-weight: 700 !important;
+        letter-spacing: .12em !important;
+        text-transform: uppercase !important;
+        color: #D4AF37 !important;
+        margin-bottom: 6px !important;
+      }
+      .modal-hero-info .mhi-desc {
+        font-size: .9rem !important;
+        color: rgba(255,255,255,.88) !important;
+        line-height: 1.7 !important;
+        margin: 0 !important;
+      }
+      .modal-hero-info .mhi-tags {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        margin-top: 4px !important;
+      }
+      .modal-hero-info .mhi-tag {
+        background: rgba(255,255,255,.14) !important;
+        border: 1px solid rgba(255,255,255,.28) !important;
+        color: #fff !important;
+        font-size: .76rem !important;
+        font-weight: 600 !important;
+        border-radius: 20px !important;
+        padding: 4px 13px !important;
+        backdrop-filter: blur(4px) !important;
+      }
+
+      /* ── RIGHT COLUMN: packs + booking (scrollable) ── */
+      .modal-body {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        overflow-y: auto !important;
+        height: 100vh !important;
+        padding: 64px 48px 64px !important;
+        background: #fff !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      /* Hide description + suited-for from right column on desktop
+         (they are shown in the image overlay instead) */
+      .modal-body .modal-desc-block,
+      .modal-body .modal-suited-block {
+        display: none !important;
+      }
+
+      /* ── X CLOSE BUTTON (fixed top-right) ── */
+      .modal-close {
+        position: fixed !important;
+        top: 20px !important;
+        right: 20px !important;
+        width: 46px !important;
+        height: 46px !important;
+        font-size: 1.2rem !important;
+        background: rgba(0,0,0,.55) !important;
+        backdrop-filter: blur(8px) !important;
+        -webkit-backdrop-filter: blur(8px) !important;
+        border-radius: 50% !important;
+        z-index: 9999 !important;
+        border: 1.5px solid rgba(255,255,255,.32) !important;
+        color: #fff !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        cursor: pointer !important;
+        transition: background .2s, transform .2s !important;
+      }
+      .modal-close:hover {
+        background: rgba(0,0,0,.88) !important;
+        transform: scale(1.08) !important;
+      }
+    }
+
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
     .hamburger span { display: block; width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: all .3s; }
     .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-    .mobile-menu { display: none; position: fixed; top: 64px; left: 0; right: 0; background: #05301D; border-top: 1px solid rgba(255,255,255,.1); padding: 20px 24px 28px; z-index: 99; flex-direction: column; gap: 4px; }
+    .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(5, 48, 29, 0.35); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: 100px 40px 40px; z-index: 99; flex-direction: column; gap: 4px; justify-content: center; }
     .mobile-menu.open { display: flex; }
-    .mobile-menu a { color: #fff; text-decoration: none; font-size: 1.05rem; font-weight: 500; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.08); transition: color .2s; }
+    .mobile-menu a { color: #fff; text-decoration: none; font-size: 1.4rem; font-weight: 600; padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.12); transition: color .2s; }
     .mobile-menu a:last-child { border-bottom: none; }
     .mobile-menu a:hover { color: #D4AF37; }
     @media(max-width:768px) { .hamburger { display: flex; } }
@@ -672,16 +979,10 @@
       .sec-head h2 { font-size: clamp(1.55rem, 6vw, 2rem); }
       .sec-head p { font-size: .9rem; }
 
-      /* — Services grid — */
-      .services-grid { grid-template-columns: 1fr; gap: 14px; }
-      .svc-img { height: 210px; }
-      .svc-body { padding: 20px; }
-      .svc-body h3 { font-size: 1.05rem; }
-
-      /* — Service card custom — */
-      .svc-card-custom-body { padding: 28px 20px 24px; }
-      .svc-card-custom h3 { font-size: 1.1rem; }
-      .svc-card-custom p { font-size: .85rem; }
+      /* — Services rows — */
+      #services .sec-head { padding: 60px 24px 40px; }
+      .svc-row-content { padding: 44px 40px; }
+      .svc-row-content h3 { font-size: 1.5rem; }
 
       /* — Modal — */
       .modal-overlay { padding: 12px; }
@@ -822,7 +1123,7 @@
 
       /* Nav */
       nav { height: 52px !important; padding: 0 14px !important; }
-      .nav-logo img { height: 20px !important; }
+      .nav-logo img { height: 18px !important; }
       #services, #why, #equipment, #contact { scroll-margin-top: 52px !important; }
       .mobile-menu { top: 52px !important; padding: 12px 16px 20px !important; }
       .mobile-menu a { font-size: .9rem !important; padding: 9px 0 !important; }
@@ -836,33 +1137,158 @@
       .btn-hero { padding: 11px 28px !important; font-size: .82rem !important; }
       .scroll-mouse-wrap { bottom: 18px; }
 
-      /* Service cards */
-      .services-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
-      .svc-img { height: 170px !important; }
-      .svc-body { padding: 14px 14px 16px !important; }
-      .svc-body h3 { font-size: .92rem !important; margin-bottom: 5px !important; }
-      .svc-body p { font-size: .76rem !important; line-height: 1.5 !important; }
-      .svc-hint { font-size: .7rem !important; margin-top: 10px !important; }
-      .svc-badge { width: 40px !important; height: 40px !important; border-radius: 9px !important; bottom: 10px !important; left: 10px !important; }
-      .svc-badge img { width: 24px !important; height: 24px !important; object-fit: contain !important; }
+      /* ── MOBILE STACKED CARDS (omglobal style) ── */
+      #services .sec-head { padding: 48px 20px 36px !important; }
+      .svc-progress { display: none !important; }
 
-      /* Custom card */
-      .svc-card-custom-body { padding: 22px 16px 20px !important; }
-      .svc-card-custom-icon { width: 42px !important; height: 42px !important; margin-bottom: 14px !important; }
-      .svc-card-custom h3 { font-size: .95rem !important; margin-bottom: 8px !important; }
-      .svc-card-custom p { font-size: .76rem !important; margin-bottom: 16px !important; }
-      .svc-card-custom-tag { font-size: .68rem !important; padding: 3px 9px !important; }
-      .svc-card-custom-btn { padding: 10px 18px !important; font-size: .78rem !important; }
+      /* Kill desktop scroll behaviour */
+      .svc-scroll-track { height: auto !important; }
+      .svc-sticky-stage { position: relative !important; top: auto !important; height: auto !important; overflow: visible !important; }
 
-      /* Modals */
-      .modal-overlay { padding: 8px !important; }
-      .modal { max-height: 93vh !important; border-radius: 14px !important; }
-      .modal-hero { height: 130px !important; }
+      /* Mobile card stack wrapper — created by JS */
+      .mob-stack-track {
+        position: relative;
+        /* height set by JS */
+      }
+      .mob-stack-stage {
+        position: sticky;
+        top: 56px;
+        height: calc(100svh - 56px);
+        overflow: hidden;
+      }
+
+      /* Each mobile card */
+      .mob-card {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #fff;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+        will-change: transform;
+        display: flex;
+        flex-direction: column;
+      }
+      .mob-card-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        display: block;
+      }
+      /* Mobile: icon wrapper overlaid on the image */
+      .mob-card-img-wrap {
+        position: relative;
+        flex-shrink: 0;
+        line-height: 0; /* remove gap below img */
+      }
+      .mob-card-icon {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        width: 44px;
+        height: 44px;
+        background: #000;
+        border: 1px solid rgba(255,255,255,.22);
+        border-radius: 10px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        z-index: 2;
+      }
+      .mob-card-icon img { width: 34px; height: 34px; object-fit: cover; display: block;  }
+      .mob-card-body {
+        padding: 22px 20px 24px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+      }
+      .mob-card-label {
+        font-size: .65rem;
+        font-weight: 700;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 8px;
+      }
+      .mob-card-body h3 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+        line-height: 1.25;
+      }
+      .mob-card-body p {
+        font-size: .82rem;
+        color: var(--gray-text);
+        line-height: 1.6;
+        margin-bottom: 18px;
+        flex: 1;
+      }
+      .mob-card-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 20px;
+        background: #05301D;
+        color: #fff;
+        font-size: .82rem;
+        font-weight: 700;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-family: inherit;
+        width: fit-content;
+      }
+      .mob-card-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+      /* Hide desktop rows on mobile */
+      .svc-row { display: none !important; }
+
+      /* Modals — restore centered card layout on mobile */
+      .modal-overlay {
+        background: rgba(0,0,0,.55) !important;
+        backdrop-filter: blur(4px) !important;
+        padding: 8px !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: opacity .25s !important;
+      }
+      .modal {
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: 93vh !important;
+        border-radius: 14px !important;
+        grid-template-columns: unset !important;
+        transform: translateY(24px) !important;
+        transition: transform .3s !important;
+        overflow-y: auto !important;
+      }
+      .modal-overlay.open .modal {
+        transform: translateY(0) !important;
+      }
+      .modal-hero { height: 130px !important; width: 100% !important; }
       .modal-hero-title h2 { font-size: .95rem !important; }
       .modal-hero-icon { width: 40px !important; height: 40px !important; border-radius: 9px !important; }
       .modal-hero-icon img { width: 30px !important; height: 30px !important; }
-      .modal-close { width: 30px !important; height: 30px !important; font-size: .9rem !important; top: 10px !important; right: 10px !important; }
-      .modal-body { padding: 16px 14px 20px !important; }
+      .modal-close {
+        position: absolute !important;
+        top: 10px !important;
+        right: 10px !important;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: .9rem !important;
+        background: rgba(0,0,0,.4) !important;
+        backdrop-filter: blur(4px) !important;
+        border-radius: 50% !important;
+        z-index: 10 !important;
+      }
+      .modal-body { display: block !important; height: auto !important; padding: 16px 14px 20px !important; }
       .modal-section-label { font-size: .6rem !important; margin-bottom: 6px !important; }
       .modal-description { font-size: .78rem !important; line-height: 1.6 !important; margin-bottom: 18px !important; }
       .utility-tag { font-size: .7rem !important; padding: 3px 10px !important; }
@@ -1167,7 +1593,7 @@
 <nav class="green-texture">
   <div class="gt-grain" aria-hidden="true"></div>
   <a href="#hero" class="nav-logo">
-    <img src="luxurtour.png" height="20" alt="LUXURTOUR Logo"/>
+    <img src="luxurtour.png" height="18" alt="LUXURTOUR Logo"/>
     <span class="nav-logo-text"></span>
   </a>
   <ul class="nav-links">
@@ -1216,51 +1642,113 @@
     <h2 data-i18n="services_title">Our Services</h2>
     <p data-i18n="services_sub">Comprehensive visual solutions designed for luxury properties and exclusive venues</p>
   </div>
-  <div class="services-grid">
-    <div class="svc-card" onclick="openModal('svc360')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800&q=80" loading="lazy" decoding="async" alt="360° panoramic photography for luxury properties Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" style="width: 40px; height: 40px;" alt="360 icon"/></div></div>
-      <div class="svc-body"><h3 data-i18n="svc1_title">360° Photography</h3><p data-i18n="svc1_desc">Immersive virtual tours that let guests explore every corner of your property before they arrive</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
-    </div>
-    <div class="svc-card" onclick="openModal('svcPhoto')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800&q=80" loading="lazy" decoding="async" alt="Professional real estate photography luxury property Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" style="width: 43px; height: 43px;" alt="Photo icon"/></div></div>
-      <div class="svc-body"><h3 data-i18n="svc2_title">Professional Photography</h3><p data-i18n="svc2_desc">High-end photography that captures the essence and luxury of your property with stunning detail</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
-    </div>
-    <div class="svc-card" onclick="openModal('svcVideo')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=80" loading="lazy" decoding="async" alt="Cinematic real estate video production luxury property Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" style="width: 43px; height: 43px;" alt="Video icon"/></div></div>
-      <div class="svc-body"><h3 data-i18n="svc3_title">Video Production</h3><p data-i18n="svc3_desc">Cinematic videos that tell your property's story and create emotional connections with potential guests</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
-    </div>
-    <div class="svc-card" onclick="openModal('svcDrone')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=80" loading="lazy" decoding="async" alt="Aerial drone footage luxury real estate photography Rome Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" style="width: 43px; height: 43px;" alt="Drone icon"/></div></div>
-      <div class="svc-body"><h3 data-i18n="svc4_title">Drone Footage</h3><p data-i18n="svc4_desc">Spectacular aerial perspectives showcasing your property's location, architecture, and surroundings</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
-    </div>
-    <div class="svc-card" onclick="openModal('svc3D')">
-      <div class="svc-img"><img class="cover" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80" loading="lazy" decoding="async" alt="3D virtual tour interactive real estate luxury property Italy"/><div class="svc-badge"><img src="data:image/png;base64,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" style="width: 65px; height: 65px;" alt="3D icon"/></div></div>
-      <div class="svc-body"><h3 data-i18n="svc5_title">3D Virtual Tours</h3><p data-i18n="svc5_desc">Interactive 3D tours that allow guests to explore your property in an engaging and immersive way</p><div class="svc-hint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg><span data-i18n="svc_explore"> Explore service</span></div></div>
-    </div>
-    <div class="svc-card-custom green-texture" onclick="openQuestionnaire('svcCustom','Custom Service')">
-  <div class="gt-grain" aria-hidden="true"></div>
-      <div class="svc-card-custom-deco"></div>
-      <div class="svc-card-custom-deco2"></div>
-      <div class="svc-card-custom-body">
-        <div class="svc-card-custom-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-        <h3 data-i18n="custom_title">Customise Your Service</h3>
-        <p data-i18n="custom_desc">Have a unique vision or a complex project that doesn't fit a standard package? Tell us exactly what you need. We design bespoke visual solutions — combining photography, video, drone, and 3D tours — tailored to your property, timeline, and goals.</p>
-        <div class="svc-card-custom-tags">
-          <span class="svc-card-custom-tag" data-i18n="custom_tag1">Fully Bespoke</span>
-          <span class="svc-card-custom-tag" data-i18n="custom_tag2">All Services Combined</span>
-          <span class="svc-card-custom-tag" data-i18n="custom_tag3">Dedicated Account Manager</span>
-          <span class="svc-card-custom-tag" data-i18n="custom_tag4">Custom Pricing</span>
-          <span class="svc-card-custom-tag" data-i18n="custom_tag5">Priority Scheduling</span>
+
+  <!-- Scroll track: tall enough to scroll through all cards -->
+  <div class="svc-scroll-track" id="svcTrack">
+    <div class="svc-sticky-stage" id="svcStage">
+
+      <!-- Card 1 — 360° Photography -->
+      <div class="svc-row" data-svc-index="0" data-modal-id="modal-svc360">
+        <div class="svc-row-img">
+          <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=1200&q=80" loading="lazy" decoding="async" alt="360° photography luxury property Italy"/>
         </div>
-        <button class="svc-card-custom-btn" onclick="event.stopPropagation(); openQuestionnaire('svcCustom','Custom Service')">
-          <span data-i18n="custom_btn">Start Your Brief</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
+        <div class="svc-row-content">
+          <span class="svc-row-label">360° Photography</span>
+          <h3 data-i18n="svc1_title">Immersive 360° Panoramic Experiences</h3>
+          <p data-i18n="svc1_desc">Fully immersive virtual tours of your property, allowing potential guests to explore every room and outdoor space as if they were physically there — optimised for web, mobile and VR.</p>
+          <button class="svc-row-btn" onclick="openModal('svc360')">
+            <span data-i18n="svc_explore">Explore service</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
       </div>
-    </div>
-  </div>
+
+      <!-- Card 2 — Professional Photography -->
+      <div class="svc-row" data-svc-index="1" data-modal-id="modal-svcPhoto">
+        <div class="svc-row-img">
+          <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" loading="lazy" decoding="async" alt="Professional real estate photography luxury property Rome Italy"/>
+        </div>
+        <div class="svc-row-content">
+          <span class="svc-row-label">Photography</span>
+          <h3 data-i18n="svc2_title">High-End Property Photography</h3>
+          <p data-i18n="svc2_desc">High-end photography that captures the essence and luxury of your property with stunning detail — from interiors and architecture to lifestyle and atmosphere.</p>
+          <button class="svc-row-btn" onclick="openModal('svcPhoto')">
+            <span data-i18n="svc_explore">Explore service</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 3 — Video Production -->
+      <div class="svc-row" data-svc-index="2" data-modal-id="modal-svcVideo">
+        <div class="svc-row-img">
+          <img src="https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=1200&q=80" loading="lazy" decoding="async" alt="Cinematic real estate video production luxury property Italy"/>
+        </div>
+        <div class="svc-row-content">
+          <span class="svc-row-label">Video Production</span>
+          <h3 data-i18n="svc3_title">Cinematic Property Films</h3>
+          <p data-i18n="svc3_desc">Cinematic videos that tell your property's story and create emotional connections with potential guests — from highlight reels and brand films to social media content.</p>
+          <button class="svc-row-btn" onclick="openModal('svcVideo')">
+            <span data-i18n="svc_explore">Explore service</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 4 — Drone Footage -->
+      <div class="svc-row" data-svc-index="3" data-modal-id="modal-svcDrone">
+        <div class="svc-row-img">
+          <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=1200&q=80" loading="lazy" decoding="async" alt="Aerial drone footage luxury real estate photography Rome Italy"/>
+        </div>
+        <div class="svc-row-content">
+          <span class="svc-row-label">Drone Footage</span>
+          <h3 data-i18n="svc4_title">Spectacular Aerial Perspectives</h3>
+          <p data-i18n="svc4_desc">Spectacular aerial perspectives showcasing your property's location, architecture and surroundings — shot with cinema-grade drones by licensed pilots.</p>
+          <button class="svc-row-btn" onclick="openModal('svcDrone')">
+            <span data-i18n="svc_explore">Explore service</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 5 — 3D Virtual Tours -->
+      <div class="svc-row" data-svc-index="4" data-modal-id="modal-svc3D">
+        <div class="svc-row-img">
+          <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=1200&q=80" loading="lazy" decoding="async" alt="3D virtual tour interactive real estate luxury property Italy"/>
+        </div>
+        <div class="svc-row-content">
+          <span class="svc-row-label">3D Virtual Tours</span>
+          <h3 data-i18n="svc5_title">Interactive 3D Property Tours</h3>
+          <p data-i18n="svc5_desc">Interactive 3D tours that allow guests to explore your property in an engaging and immersive way — with accurate spatial depth and full 360° navigation.</p>
+          <button class="svc-row-btn" onclick="openModal('svc3D')">
+            <span data-i18n="svc_explore">Explore service</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Card 6 — Custom -->
+      <div class="svc-row svc-row-custom" data-svc-index="5">
+        <div class="svc-row-img">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80" loading="lazy" decoding="async" alt="Bespoke luxury real estate visual services Italy"/>
+        </div>
+        <div class="svc-row-content">
+          <span class="svc-row-label">Bespoke Solutions</span>
+          <h3 data-i18n="custom_title">Customise Your Service</h3>
+          <p data-i18n="custom_desc">Have a unique vision or a complex project that doesn't fit a standard package? We design bespoke visual solutions — combining photography, video, drone and 3D tours — tailored to your property, timeline and goals.</p>
+          <button class="svc-row-btn" onclick="openQuestionnaire('svcCustom','Custom Service')">
+            <span data-i18n="custom_btn">Start Your Brief</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div><!-- /svc-sticky-stage -->
+  </div><!-- /svc-scroll-track -->
 </section>
 
+<!-- Progress dots -->
+<div class="svc-progress" id="svcProgress"></div>
 <!-- MODALS -->
 
 <!-- 360° Photography -->
@@ -1268,10 +1756,10 @@
   <div class="modal">
     <div class="modal-hero"><img data-src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=900&q=70" loading="lazy" decoding="async" alt=""/><div class="modal-hero-overlay"><div class="modal-hero-title"><div class="modal-hero-icon"><img src="data:image/png;base64,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" alt=""/></div><h2 data-i18n="modal_title_360">360° Photography</h2></div></div><button class="modal-close" onclick="closeModal('svc360')">✕</button></div>
     <div class="modal-body">
-      <p class="modal-section-label" data-i18n="modal_about">About this service</p>
-      <p class="modal-description" data-i18n="modal_360_desc">Our 360° photography service creates fully immersive virtual tours of your property, allowing potential guests to explore every room, corridor, and outdoor space as if they were physically there. Using cutting-edge Insta360 technology and professional post-processing, we deliver seamless, high-resolution panoramic experiences optimized for web, mobile, and VR platforms.</p>
-      <p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
-      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Apartments & Penthouses</span><span class="utility-tag">Event Venues</span><span class="utility-tag">Restaurants & Spas</span><span class="utility-tag">Real Estate Listings</span></div>
+      <div class="modal-desc-block"><p class="modal-section-label" data-i18n="modal_about">About this service</p>
+      <p class="modal-description" data-i18n="modal_360_desc">Our 360° photography service creates fully immersive virtual tours of your property, allowing potential guests to explore every room, corridor, and outdoor space as if they were physically there. Using cutting-edge Insta360 technology and professional post-processing, we deliver seamless, high-resolution panoramic experiences optimized for web, mobile, and VR platforms.</p></div>
+      <div class="modal-suited-block"><p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
+      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Apartments & Penthouses</span><span class="utility-tag">Event Venues</span><span class="utility-tag">Restaurants & Spas</span><span class="utility-tag">Real Estate Listings</span></div></div>
       <p class="modal-section-label" data-i18n="modal_packs">Service packs</p>
       <div class="packs-grid">
         <div class="pack-card"><div class="pack-name" data-i18n="pack_essential">Essential</div><div class="pack-price">€600 <span data-i18n="pack_per_session">/ session</span></div><ul class="pack-features"><li data-i18n="f360_e1">Up to 5 panoramic scenes</li><li data-i18n="f360_e2">Web-ready embed link</li><li data-i18n="f360_e3">Basic hotspot navigation</li><li data-i18n="f360_e4">48h delivery</li></ul><button class="pack-cta" data-i18n="pack_reserve" onclick="openBooking('svc360','Essential')">Reserve</button></div>
@@ -1312,10 +1800,10 @@
   <div class="modal">
     <div class="modal-hero"><img data-src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=900&q=70" loading="lazy" decoding="async" alt=""/><div class="modal-hero-overlay"><div class="modal-hero-title"><div class="modal-hero-icon"><img src="data:image/png;base64,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" alt=""/></div><h2 data-i18n="modal_title_photo">Professional Photography</h2></div></div><button class="modal-close" onclick="closeModal('svcPhoto')">✕</button></div>
     <div class="modal-body">
-      <p class="modal-section-label" data-i18n="modal_about">About this service</p>
-      <p class="modal-description" data-i18n="modal_photo_desc">We capture your property's beauty with precision and artistry. From golden-hour exteriors to perfectly lit interiors, our photographers use professional-grade Fujifilm, Canon, and Sony systems paired with expert lighting setups to produce images that stand out on booking platforms, brochures, and social media.</p>
-      <p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
-      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Apartments & Penthouses</span><span class="utility-tag">Private Homes</span><span class="utility-tag">B&Bs</span><span class="utility-tag">Architecture & Interior Design</span><span class="utility-tag">Real Estate Listings</span></div>
+      <div class="modal-desc-block"><p class="modal-section-label" data-i18n="modal_about">About this service</p>
+      <p class="modal-description" data-i18n="modal_photo_desc">We capture your property's beauty with precision and artistry. From golden-hour exteriors to perfectly lit interiors, our photographers use professional-grade Fujifilm, Canon, and Sony systems paired with expert lighting setups to produce images that stand out on booking platforms, brochures, and social media.</p></div>
+      <div class="modal-suited-block"><p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
+      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Apartments & Penthouses</span><span class="utility-tag">Private Homes</span><span class="utility-tag">B&Bs</span><span class="utility-tag">Architecture & Interior Design</span><span class="utility-tag">Real Estate Listings</span></div></div>
       <p class="modal-section-label" data-i18n="modal_packs">Service packs</p>
       <div class="packs-grid">
         <div class="pack-card"><div class="pack-name" data-i18n="pack_essential">Essential</div><div class="pack-price">€500 <span data-i18n="pack_per_session">/ session</span></div><ul class="pack-features"><li data-i18n="fph_e1">Up to 15 edited photos</li><li data-i18n="fph_e2">Interior &amp; exterior shots</li><li data-i18n="fph_e3">Basic retouching</li><li data-i18n="fph_e4">48h delivery</li></ul><button class="pack-cta" data-i18n="pack_reserve" onclick="openBooking('svcPhoto','Essential')">Reserve</button></div>
@@ -1357,10 +1845,10 @@
   <div class="modal">
     <div class="modal-hero"><img data-src="https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=900&q=70" loading="lazy" decoding="async" alt=""/><div class="modal-hero-overlay"><div class="modal-hero-title"><div class="modal-hero-icon"><img src="data:image/png;base64,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" alt=""/></div><h2 data-i18n="modal_title_video">Video Production</h2></div></div><button class="modal-close" onclick="closeModal('svcVideo')">✕</button></div>
     <div class="modal-body">
-      <p class="modal-section-label" data-i18n="modal_about">About this service</p>
-      <p class="modal-description" data-i18n="modal_video_desc">Our cinematic video production service transforms your property into a compelling story. We handle everything from pre-production planning to final color grading — delivering broadcast-quality videos that captivate viewers on your website, social channels, and OTA listings.</p>
-      <p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
-      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Event Venues</span><span class="utility-tag">Restaurants & Spas</span><span class="utility-tag">Architecture & Interior Design</span><span class="utility-tag">Real Estate Listings</span></div>
+      <div class="modal-desc-block"><p class="modal-section-label" data-i18n="modal_about">About this service</p>
+      <p class="modal-description" data-i18n="modal_video_desc">Our cinematic video production service transforms your property into a compelling story. We handle everything from pre-production planning to final color grading — delivering broadcast-quality videos that captivate viewers on your website, social channels, and OTA listings.</p></div>
+      <div class="modal-suited-block"><p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
+      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Event Venues</span><span class="utility-tag">Restaurants & Spas</span><span class="utility-tag">Architecture & Interior Design</span><span class="utility-tag">Real Estate Listings</span></div></div>
       <p class="modal-section-label" data-i18n="modal_packs">Service packs</p>
       <div class="packs-grid">
         <div class="pack-card"><div class="pack-name" data-i18n="pack_essential">Essential</div><div class="pack-price">€500 <span data-i18n="pack_per_project">/ project</span></div><ul class="pack-features"><li data-i18n="fvid_e1">3–5 30 second reels</li><li data-i18n="fvid_e2">Dynamic editing</li><li data-i18n="fvid_e3">Basic color grade</li><li data-i18n="fvid_e4">Vertical format</li><li data-i18n="fvid_e5">Visual storytelling</li><li data-i18n="fvid_e6">Professional Cameras</li><li data-i18n="fvid_e7">3 revision rounds</li><li data-i18n="fvid_e8">3 day delivery</li></ul><button class="pack-cta" data-i18n="pack_reserve" onclick="openBooking('svcVideo','Essential')">Reserve</button></div>
@@ -1403,10 +1891,10 @@
   <div class="modal">
     <div class="modal-hero"><img data-src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=900&q=70" loading="lazy" decoding="async" alt=""/><div class="modal-hero-overlay"><div class="modal-hero-title"><div class="modal-hero-icon"><img src="data:image/png;base64,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" alt=""/></div><h2 data-i18n="modal_title_drone">Drone Footage</h2></div></div><button class="modal-close" onclick="closeModal('svcDrone')">✕</button></div>
     <div class="modal-body">
-      <p class="modal-section-label" data-i18n="modal_about">About this service</p>
-      <p class="modal-description" data-i18n="modal_drone_desc">Elevate your property presentation with breathtaking aerial perspectives captured by our licensed DJI drone operators. We showcase your location, surrounding landscape, architectural highlights, and proximity to key landmarks — giving potential guests a truly unique bird's-eye perspective.</p>
-      <p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
-      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Large Residential Complexes</span><span class="utility-tag">Event Venues</span><span class="utility-tag">Architecture & Interior Design</span><span class="utility-tag">Real Estate Listings</span></div>
+      <div class="modal-desc-block"><p class="modal-section-label" data-i18n="modal_about">About this service</p>
+      <p class="modal-description" data-i18n="modal_drone_desc">Elevate your property presentation with breathtaking aerial perspectives captured by our licensed DJI drone operators. We showcase your location, surrounding landscape, architectural highlights, and proximity to key landmarks — giving potential guests a truly unique bird's-eye perspective.</p></div>
+      <div class="modal-suited-block"><p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
+      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Large Residential Complexes</span><span class="utility-tag">Event Venues</span><span class="utility-tag">Architecture & Interior Design</span><span class="utility-tag">Real Estate Listings</span></div></div>
       <p class="modal-section-label" data-i18n="modal_packs">Service packs</p>
       <div class="packs-grid">
         <div class="pack-card"><div class="pack-name" data-i18n="pack_essential">Essential</div><div class="pack-price">€550 <span data-i18n="pack_per_session">/ session</span></div><ul class="pack-features"><li data-i18n="fdr_e1">2 aerial videos</li><li data-i18n="fdr_e2">Dynamic editing</li><li data-i18n="fdr_e3">Professional color grading</li><li data-i18n="fdr_e4">Social media optimized</li><li data-i18n="fdr_e5">High-res digital delivery</li><li data-i18n="fdr_e6">48h delivery</li></ul><button class="pack-cta" data-i18n="pack_reserve" onclick="openBooking('svcDrone','Essential')">Reserve</button></div>
@@ -1448,10 +1936,10 @@
   <div class="modal">
     <div class="modal-hero"><img data-src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=900&q=70" loading="lazy" decoding="async" alt=""/><div class="modal-hero-overlay"><div class="modal-hero-title"><div class="modal-hero-icon"><img src="data:image/png;base64,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" alt="" style="width:60px;height:60px;"/></div><h2 data-i18n="modal_title_3d">3D Virtual Tours</h2></div></div><button class="modal-close" onclick="closeModal('svc3D')">✕</button></div>
     <div class="modal-body">
-      <p class="modal-section-label" data-i18n="modal_about">About this service</p>
-      <p class="modal-description" data-i18n="modal_3d_desc">Our 3D virtual tours go beyond simple panoramas — we capture full spatial data of your property, allowing visitors to freely walk through rooms, measure spaces, view dollhouse models, and experience your venue in true three-dimensional depth.</p>
-      <p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
-      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Apartments & Penthouses</span><span class="utility-tag">Private Homes</span><span class="utility-tag">B&Bs</span><span class="utility-tag">Real Estate Listings</span><span class="utility-tag">Large Residential Complexes</span></div>
+      <div class="modal-desc-block"><p class="modal-section-label" data-i18n="modal_about">About this service</p>
+      <p class="modal-description" data-i18n="modal_3d_desc">Our 3D virtual tours go beyond simple panoramas — we capture full spatial data of your property, allowing visitors to freely walk through rooms, measure spaces, view dollhouse models, and experience your venue in true three-dimensional depth.</p></div>
+      <div class="modal-suited-block"><p class="modal-section-label" data-i18n="modal_suited">Best suited for</p>
+      <div class="modal-utility"><span class="utility-tag">Hotels & Boutique Resorts</span><span class="utility-tag">Luxury Villas</span><span class="utility-tag">Apartments & Penthouses</span><span class="utility-tag">Private Homes</span><span class="utility-tag">B&Bs</span><span class="utility-tag">Real Estate Listings</span><span class="utility-tag">Large Residential Complexes</span></div></div>
       <p class="modal-section-label" data-i18n="modal_packs">Service packs</p>
       <div class="packs-grid">
         <div class="pack-card"><div class="pack-name" data-i18n="pack_essential">Essential</div><div class="pack-price">€600 <span data-i18n="pack_per_session">/ session</span></div><ul class="pack-features"><li data-i18n="f3d_e1">Up to 150m²</li><li data-i18n="f3d_e2">Full Matterport-style scan</li><li data-i18n="f3d_e3">Interactive walkthrough</li><li data-i18n="f3d_e4">Embeddable link</li><li data-i18n="f3d_e5">6 months hosting included</li><li data-i18n="f3d_e6">Digital delivery 48h</li></ul><button class="pack-cta" data-i18n="pack_reserve" onclick="openBooking('svc3D','Essential')">Reserve</button></div>
@@ -1490,7 +1978,7 @@
 
 <section id="clients" style="background:#fff;padding:64px 48px;text-align:center;">
   <div style="max-width:1100px;margin:0 auto;">
-    <p style="font-size:clamp(1.9rem,4vw,2.5rem);font-weight:800;color:#D4AF37;margin-bottom:16px;" data-i18n="clients_title" data-i18n="clients_label">Who We Serve</p>
+    <h2 style="font-size:clamp(1.9rem,4vw,2.5rem);font-weight:800;color:#D4AF37;margin-bottom:16px;" data-i18n="clients_title" data-i18n="clients_label">Who We Serve</h2>
     <p style="font-size:1rem;color:#6b7280;line-height:1.75;margin-bottom:36px;max-width:640px;margin-left:auto;margin-right:auto;" data-i18n="clients_sub">We work with the finest properties and brands across Italy and Europe, delivering premium visual content that elevates every project</p>
     <button id="clients-toggle-btn" onclick="toggleClientsPanel()" style="display:inline-flex;align-items:center;gap:10px;padding:16px 40px;background:#05301D;color:#D4AF37;font-family:inherit;font-size:.95rem;font-weight:700;letter-spacing:.04em;border:2px solid #05301D;border-radius:50px;cursor:pointer;transition:all .25s;margin-bottom:0;" onmouseover="this.style.background='transparent';this.style.color='#05301D';" onmouseout="if(!clientsPanelOpen){this.style.background='#05301D';this.style.color='#D4AF37';}">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -1668,7 +2156,7 @@ function toggleEquipmentPanel(){
   <div class="gt-grain" aria-hidden="true"></div>
   <div class="footer-top">
     <div>
-      <div class="footer-brand-row"><img src="luxurtour.png" height="30" alt="LUXURTOUR Logo"/></div>
+      <div class="footer-brand-row"><img src="luxurtour.png" height="25" alt="LUXURTOUR Logo"/></div>
       <p class="footer-desc" data-i18n="footer_desc">Premium 360° photography, professional videos, and drone footage for exclusive clients and luxury properties worldwide.</p>
       <div class="socials">
         <a href="" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
@@ -2048,12 +2536,82 @@ function openModal(id) {
 
   const heroImg = overlay.querySelector('.modal-hero img[data-src]');
   if (heroImg) { heroImg.src = heroImg.getAttribute('data-src'); heroImg.removeAttribute('data-src'); }
+
+  // ── DESKTOP: inject description + tags into the image overlay ──
+  if (window.innerWidth > 768) {
+    const heroOverlay = overlay.querySelector('.modal-hero-overlay');
+
+    // Remove any previously injected info panel
+    const existing = heroOverlay.querySelector('.modal-hero-info');
+    if (existing) existing.remove();
+
+    // Grab description text
+    const descEl = overlay.querySelector('.modal-desc-block .modal-description');
+    const descText = descEl ? descEl.textContent : '';
+
+    // Grab suited-for tags
+    const suitedBlock = overlay.querySelector('.modal-suited-block');
+    const tags = suitedBlock ? Array.from(suitedBlock.querySelectorAll('.utility-tag')).map(t => t.textContent) : [];
+
+    // Build the info panel
+    const info = document.createElement('div');
+    info.className = 'modal-hero-info';
+
+    if (descText) {
+      const aboutLabel = document.createElement('div');
+      aboutLabel.className = 'mhi-label';
+      aboutLabel.textContent = 'About this service';
+      const aboutDesc = document.createElement('p');
+      aboutDesc.className = 'mhi-desc';
+      aboutDesc.textContent = descText;
+      info.appendChild(aboutLabel);
+      info.appendChild(aboutDesc);
+    }
+
+    if (tags.length) {
+      const suitedLabel = document.createElement('div');
+      suitedLabel.className = 'mhi-label';
+      suitedLabel.style.marginTop = '16px';
+      suitedLabel.textContent = 'Best suited for';
+      const tagsWrap = document.createElement('div');
+      tagsWrap.className = 'mhi-tags';
+      tags.forEach(t => {
+        const span = document.createElement('span');
+        span.className = 'mhi-tag';
+        span.textContent = t;
+        tagsWrap.appendChild(span);
+      });
+      info.appendChild(suitedLabel);
+      info.appendChild(tagsWrap);
+    }
+
+    // Insert info BEFORE the title row
+    const titleRow = heroOverlay.querySelector('.modal-hero-title');
+    heroOverlay.insertBefore(info, titleRow);
+  }
+
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeModal(id) { document.getElementById('modal-' + id).classList.remove('open'); document.body.style.overflow = ''; }
-function closeModalOutside(e) { if (e.target === e.currentTarget) { e.currentTarget.classList.remove('open'); document.body.style.overflow = ''; } }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; }); } });
+
+function closeModal(id) {
+  const overlay = document.getElementById('modal-' + id);
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  // Clean up injected info panel
+  const info = overlay.querySelector('.modal-hero-info');
+  if (info) info.remove();
+}
+
+function closeModalOutside(e) {
+  if (e.target === e.currentTarget) {
+    e.currentTarget.classList.remove('open');
+    document.body.style.overflow = '';
+    const info = e.currentTarget.querySelector('.modal-hero-info');
+    if (info) info.remove();
+  }
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; const info = m.querySelector('.modal-hero-info'); if (info) info.remove(); }); } });
 
 const REGIONS = [
 
@@ -2368,7 +2926,7 @@ const translations = {
     svc_custom_title: 'Custom Project',
     svc_custom_desc: 'Have a unique vision or need a combination of services? Tell us about your project and we\'ll build a bespoke solution tailored to your exact needs.',
     svc_custom_tag1: 'Bespoke Packages', svc_custom_tag2: 'Multi-Service Bundles', svc_custom_tag3: 'Dedicated Support',
-    svc_custom_btn: 'Build Your Package',
+    svc_custom_btn: 'Start Your Brief',
     svc_explore: ' Explore service',
     // MODAL LABELS
     modal_about: 'About this service', modal_suited: 'Best suited for', modal_packs: 'Service packs',
@@ -2430,7 +2988,7 @@ const translations = {
     custom_title: 'Customise Your Service',
     custom_desc: 'Have a unique vision or a complex project that doesn\'t fit a standard package? Tell us exactly what you need. We design bespoke visual solutions — combining photography, video, drone, and 3D tours — tailored to your property, timeline, and goals.',
     custom_tag1: 'Fully Bespoke', custom_tag2: 'All Services Combined', custom_tag3: 'Dedicated Account Manager', custom_tag4: 'Custom Pricing', custom_tag5: 'Priority Scheduling',
-    custom_btn: 'Start Your Brief',
+    custom_btn: 'Starty',
     // QUESTIONNAIRE HEADER
     q_header_title: 'Custom Project Brief',
     q_header_sub: 'Help us understand your project so we can build the perfect solution for you.',
@@ -2536,7 +3094,7 @@ const translations = {
     svc_custom_title: 'Progetto Personalizzato',
     svc_custom_desc: 'Hai una visione unica o hai bisogno di una combinazione di servizi? Raccontaci il tuo progetto e costruiremo una soluzione su misura per le tue esigenze.',
     svc_custom_tag1: 'Pacchetti su Misura', svc_custom_tag2: 'Bundle Multi-Servizio', svc_custom_tag3: 'Supporto Dedicato',
-    svc_custom_btn: 'Costruisci il Tuo Pacchetto',
+    svc_custom_btn: 'Start Your Brief',
     svc_explore: ' Esplora il servizio',
     // MODAL LABELS
     modal_about: 'Informazioni sul servizio', modal_suited: 'Ideale per', modal_packs: 'Pacchetti servizio',
@@ -2598,7 +3156,7 @@ const translations = {
     custom_title: 'Personalizza il Tuo Servizio',
     custom_desc: 'Hai una visione unica o un progetto complesso che non rientra in un pacchetto standard? Dicci esattamente di cosa hai bisogno. Progettiamo soluzioni visive su misura — combinando fotografia, video, drone e tour 3D — adattate alla tua proprietà, tempistica e obiettivi.',
     custom_tag1: 'Completamente Su Misura', custom_tag2: 'Tutti i Servizi Combinati', custom_tag3: 'Account Manager Dedicato', custom_tag4: 'Prezzi Personalizzati', custom_tag5: 'Pianificazione Prioritaria',
-    custom_btn: 'Inizia il Tuo Brief',
+    custom_btn: 'Starty',
     // QUESTIONNAIRE HEADER
     q_header_title: 'Brief Progetto Personalizzato',
     q_header_sub: 'Aiutaci a capire il tuo progetto così possiamo costruire la soluzione perfetta per te.',
@@ -2693,7 +3251,7 @@ const translations = {
     svc_custom_title: 'Proyecto Personalizado',
     svc_custom_desc: '¿Tienes una visión única o necesitas una combinación de servicios? Cuéntanos tu proyecto y crearemos una solución a medida para tus necesidades exactas.',
     svc_custom_tag1: 'Paquetes a Medida', svc_custom_tag2: 'Bundles Multi-Servicio', svc_custom_tag3: 'Soporte Dedicado',
-    svc_custom_btn: 'Crea Tu Paquete',
+    svc_custom_btn: 'Start Your Brief',
     svc_explore: ' Explorar servicio',
     // MODAL LABELS
     modal_about: 'Sobre este servicio', modal_suited: 'Ideal para', modal_packs: 'Paquetes de servicio',
@@ -2755,7 +3313,7 @@ const translations = {
     custom_title: 'Personaliza Tu Servicio',
     custom_desc: '¿Tienes una visión única o un proyecto complejo que no encaja en un paquete estándar? Dinos exactamente lo que necesitas. Diseñamos soluciones visuales a medida — combinando fotografía, vídeo, dron y tours 3D — adaptadas a tu propiedad, plazos y objetivos.',
     custom_tag1: 'Totalmente a Medida', custom_tag2: 'Todos los Servicios Combinados', custom_tag3: 'Account Manager Dedicado', custom_tag4: 'Precios Personalizados', custom_tag5: 'Programación Prioritaria',
-    custom_btn: 'Inicia Tu Brief',
+    custom_btn: 'Starty',
     // QUESTIONNAIRE HEADER
     q_header_title: 'Brief de Proyecto Personalizado',
     q_header_sub: 'Ayúdanos a entender tu proyecto para que podamos crear la solución perfecta para ti.',
@@ -2943,5 +3501,301 @@ window.addEventListener('DOMContentLoaded', () => {
   <p>Nuestros servicios incluyen fotografía inmobiliaria profesional, producción de video cinematográfico, imágenes aéreas con dron, fotografía panorámica de 360 grados y tours virtuales 3D interactivos. Servimos a clientes en Roma, Lacio, Toscana, Costa Amalfitana, Cerdeña, Milán, Venecia, Florencia y todas las principales ciudades italianas.</p>
   <p>Fotografía inmobiliaria Roma. Fotografía de hotel Italia. Fotografía de villa Toscana. Imágenes de dron inmuebles Italia. Tour virtual 3D propiedad de lujo. Fotografía 360 hotel Roma. Video inmobiliario cinematográfico Italia. Fotografía aérea vi
 </div>
+
+<script>
+/* ── OMGLOBAL SCROLL STACK ── */
+(function () {
+  var NAV_H    = 70;
+  var CARD_H   = function() { return window.innerHeight - NAV_H; };
+  var track    = document.getElementById('svcTrack');
+  var stage    = document.getElementById('svcStage');
+  var progress = document.getElementById('svcProgress');
+  if (!track || !stage) return;
+
+  var cards = Array.from(stage.querySelectorAll('.svc-row'));
+  var n     = cards.length;
+
+  /* ---- Build progress dots ---- */
+  var dots = cards.map(function(_, i) {
+    var d = document.createElement('span');
+    d.className = 'svc-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', function() { scrollToCard(i); });
+    progress.appendChild(d);
+    return d;
+  });
+
+  /* ---- Set track height = n * viewport heights ---- */
+  function setTrackHeight() {
+    track.style.height = (n * CARD_H()) + 'px';
+  }
+
+  /* ---- Scroll to a specific card ---- */
+  function scrollToCard(idx) {
+    var trackTop = track.getBoundingClientRect().top + window.scrollY;
+    window.scrollTo({ top: trackTop + idx * CARD_H(), behavior: 'smooth' });
+  }
+
+  /* ---- Main render on scroll ---- */
+  function onScroll() {
+    var rect      = track.getBoundingClientRect();
+    var trackTop  = rect.top;      // distance of track top from viewport top
+    var trackH    = track.offsetHeight;
+    var ch        = CARD_H();
+
+    /* How far we've scrolled inside the track (0 … trackH) */
+    var scrolled  = -trackTop;     // positive once track top passes nav
+
+    /* Is the section active (sticky stage visible)? */
+    var isActive  = trackTop <= NAV_H && (trackTop + trackH) >= NAV_H + ch;
+    progress.classList.toggle('visible', isActive);
+
+    /* Current card index (which card "slot" we're in) */
+    var rawIdx    = scrolled / ch;
+    var current   = Math.min(Math.max(Math.floor(rawIdx), 0), n - 1);
+
+    /* Progress within the current card slot (0 → 1) */
+    var progress_ = rawIdx - current;  // 0 = card just became active, 1 = next card arriving
+
+    cards.forEach(function(card, i) {
+      if (i < current) {
+        /* Past cards: fully in place (slide = 0) */
+        card.style.transform = 'translateY(0)';
+        card.style.zIndex    = i + 1;
+      } else if (i === current) {
+        /* Active card: sits at 0 */
+        card.style.transform = 'translateY(0)';
+        card.style.zIndex    = current + 1;
+      } else {
+        /* Future cards: waiting below */
+        var offset = (i - current - progress_) * 100;
+        card.style.transform = 'translateY(' + Math.max(offset, 0) + '%)';
+        card.style.zIndex    = i + 1;
+      }
+    });
+
+    /* Update dots */
+    dots.forEach(function(d, i) {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  /* ---- Init ---- */
+  setTrackHeight();
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', function() {
+    setTrackHeight();
+    onScroll();
+  });
+})();
+</script>
+<script>
+/* ── MOBILE STACKED CARDS ── */
+(function () {
+  var BREAKPOINT = 768;
+
+  /* Card data matching the desktop svc-rows */
+  var cards = [
+    { label: '360° Photography',    title: '360° Panoramic Experiences',   desc: 'Fully immersive virtual tours of your property, allowing potential guests to explore every room and outdoor space — optimised for web, mobile and VR.', img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800&q=80', action: function(){ openModal('svc360'); },   modalId: 'modal-svc360' },
+    { label: 'Photography',         title: 'High-End Property Photography', desc: 'High-end photography that captures the essence and luxury of your property with stunning detail — from interiors to lifestyle and atmosphere.',        img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80', action: function(){ openModal('svcPhoto'); },  modalId: 'modal-svcPhoto' },
+    { label: 'Video Production',    title: 'Cinematic Property Films',      desc: 'Cinematic videos that tell your property\'s story and create emotional connections — from highlight reels and brand films to social media content.',     img: 'https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=80', action: function(){ openModal('svcVideo'); },  modalId: 'modal-svcVideo' },
+    { label: 'Drone Footage',       title: 'Spectacular Aerial Perspectives',desc: 'Spectacular aerial perspectives showcasing your property\'s location, architecture and surroundings — shot by licensed drone pilots.',               img: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=80', action: function(){ openModal('svcDrone'); },  modalId: 'modal-svcDrone' },
+    { label: '3D Virtual Tours',    title: 'Interactive 3D Property Tours', desc: 'Interactive 3D tours that allow guests to explore your property in an engaging and immersive way — with accurate spatial depth and full navigation.',    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80', action: function(){ openModal('svc3D'); },    modalId: 'modal-svc3D' },
+    { label: 'Bespoke Solutions',   title: 'Customise Your Service',        desc: 'Have a unique vision? We design bespoke visual solutions — combining photography, video, drone and 3D tours — tailored to your property and goals.',      img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80', action: function(){ openQuestionnaire('svcCustom','Custom Service'); }, btn: 'Start Your Brief', modalId: null },
+  ];
+
+  var NAV_H   = 56;
+  var PEEK    = 14;   /* px each stacked card peeks below the previous */
+  var track   = null;
+  var stage   = null;
+  var cardEls = [];
+  var built   = false;
+  var isMob   = false;
+
+  /* ─── Build the mobile DOM ─── */
+  function build() {
+    if (built) return;
+    built = true;
+
+    var section = document.getElementById('services');
+    var svcTrack = document.getElementById('svcTrack');
+
+    /* Outer scroll track */
+    track = document.createElement('div');
+    track.className = 'mob-stack-track';
+    track.id = 'mobStackTrack';
+
+    /* Sticky stage */
+    stage = document.createElement('div');
+    stage.className = 'mob-stack-stage';
+    stage.id = 'mobStackStage';
+    track.appendChild(stage);
+
+    /* Insert after svcTrack */
+    svcTrack.parentNode.insertBefore(track, svcTrack.nextSibling);
+
+    /* Create card elements */
+    cards.forEach(function(d, i) {
+      var el = document.createElement('div');
+      el.className = 'mob-card';
+
+      /* Build image wrapper with icon overlay using DOM — avoids any innerHTML escaping issues */
+      var imgWrap = document.createElement('div');
+      imgWrap.style.cssText = 'position:relative;flex-shrink:0;line-height:0;height:200px;overflow:hidden;';
+
+      var cardImg = document.createElement('img');
+      cardImg.className = 'mob-card-img';
+      cardImg.src = d.img;
+      cardImg.loading = 'lazy';
+      cardImg.alt = d.label;
+      cardImg.style.cssText = 'width:100%;height:200px;object-fit:cover;display:block;';
+      imgWrap.appendChild(cardImg);
+
+      if (d.modalId) {
+        var modalEl2 = document.getElementById(d.modalId);
+        if (modalEl2) {
+          var iconImg2 = modalEl2.querySelector('.modal-hero-icon img');
+          if (iconImg2) {
+            var iconDiv = document.createElement('div');
+            iconDiv.style.cssText = 'position:absolute;bottom:16px;left:16px;z-index:10;width:44px;height:44px;background:#000;border:1px solid rgba(255,255,255,0.25);border-radius:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;';
+            var iconImgEl = document.createElement('img');
+            iconImgEl.src = iconImg2.getAttribute('src');
+            iconImgEl.alt = '';
+            iconImgEl.style.cssText = 'width:34px;height:34px;object-fit:cover;display:block;';
+            iconDiv.appendChild(iconImgEl);
+            imgWrap.appendChild(iconDiv);
+          }
+        }
+      }
+
+      /* Build card body */
+      var body = document.createElement('div');
+      body.className = 'mob-card-body';
+      body.innerHTML =
+        '<span class="mob-card-label">' + d.label + '</span>' +
+        '<h3>' + d.title + '</h3>' +
+        '<p>' + d.desc + '</p>' +
+        '<button class="mob-card-btn">' +
+          (d.btn || 'Explore service') +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
+        '</button>';
+
+      el.appendChild(imgWrap);
+      el.appendChild(body);
+      body.querySelector('.mob-card-btn').addEventListener('click', d.action);
+      stage.appendChild(el);
+      cardEls.push(el);
+    });
+  }
+
+  /* ─── Resize: set card sizes & track height ─── */
+  function resize() {
+    if (!built) return;
+    var stageH = window.innerHeight - NAV_H;
+    var cardH  = stageH - (cards.length - 1) * PEEK; /* height of one card when fully visible */
+    cardH = Math.min(cardH, stageH * 0.66);          /* cap at 66% of stage (~25% shorter) */
+
+    /* Position all cards */
+    cardEls.forEach(function(el, i) {
+      el.style.height = cardH + 'px';
+      /* Initial stacked position: card i sits at PEEK*i from top */
+      el.style.top = (i * PEEK) + 'px';
+    });
+
+    /* Track height = one card scroll-slot per card */
+    track.style.height = (cards.length * cardH) + 'px';
+
+    onScroll();
+  }
+
+  /* ─── Scroll handler ─── */
+  function onScroll() {
+    if (!built) return;
+    var stageH = window.innerHeight - NAV_H;
+    var cardH  = Math.min(stageH - (cards.length - 1) * PEEK, stageH * 0.66);
+    var rect   = track.getBoundingClientRect();
+    /* scrolled = how far into the track we are (0 at entry, positive as we scroll down) */
+    var scrolled = -(rect.top - NAV_H);
+
+    cardEls.forEach(function(el, i) {
+      /* Each card occupies one cardH worth of scroll */
+      var cardStart = i * cardH;
+      var progress  = scrolled - cardStart;
+
+      if (progress <= 0) {
+        var stackY = i * PEEK;
+        el.style.transform = 'translateY(' + stackY + 'px) scale(1)';
+        el.style.zIndex    = cards.length - i;
+        el.style.opacity   = '1';
+      } else if (progress < cardH) {
+        var leaveY = i * PEEK - progress;
+        el.style.transform = 'translateY(' + leaveY + 'px) scale(1)';
+        el.style.zIndex    = cards.length - i;
+        el.style.opacity   = String(Math.max(0, 1 - progress / (cardH * 0.6)));
+      } else {
+        el.style.transform = 'translateY(-100%) scale(1)';
+        el.style.zIndex    = 0;
+        el.style.opacity   = '0';
+      }
+    });
+  }
+
+  /* ─── Toggle mobile mode ─── */
+  function check() {
+    var nowMob = window.innerWidth <= BREAKPOINT;
+    if (nowMob && !isMob) {
+      isMob = true;
+      build();
+      track.style.display = '';
+      resize();
+    } else if (!nowMob && isMob) {
+      isMob = false;
+      if (track) track.style.display = 'none';
+    } else if (nowMob) {
+      resize();
+    }
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', check);
+  window.addEventListener('DOMContentLoaded', check);
+  check();
+})();
+</script>
+<script>
+/* ── DESKTOP SVC-ROW ICON OVERLAY ── */
+/* Reads the icon from each card's linked modal and injects it over the image */
+(function() {
+  function injectDesktopIcons() {
+    var rows = document.querySelectorAll('.svc-row[data-modal-id]');
+    rows.forEach(function(row) {
+      var modalId = row.getAttribute('data-modal-id');
+      if (!modalId) return;
+      var modalEl = document.getElementById(modalId);
+      if (!modalEl) return;
+      var iconImg = modalEl.querySelector('.modal-hero-icon img');
+      if (!iconImg) return;
+      var imgWrap = row.querySelector('.svc-row-img');
+      if (!imgWrap) return;
+      /* Avoid double-injection */
+      if (imgWrap.querySelector('.svc-row-img-icon')) return;
+      var iconDiv = document.createElement('div');
+      iconDiv.className = 'svc-row-img-icon';
+      iconDiv.style.cssText = 'position:absolute;bottom:28px;left:28px;z-index:4;width:60px;height:60px;background:#000;border:1px solid rgba(255,255,255,.22);border-radius:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;';
+      var img = document.createElement('img');
+      img.src = iconImg.getAttribute('src');
+      img.alt = '';
+      img.style.cssText = 'width:44px;height:44px;object-fit:cover;display:block;position:static;';
+      iconDiv.appendChild(img);
+      imgWrap.appendChild(iconDiv);
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectDesktopIcons);
+  } else {
+    injectDesktopIcons();
+  }
+})();
+</script>
 </body>
 </html>
