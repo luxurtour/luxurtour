@@ -2752,10 +2752,10 @@ document.addEventListener('keydown', function(e) {
       <!-- Step progress -->
       <div class="q-progress-wrap">
         <div class="q-progress-steps">
-          <div class="q-progress-step active" id="q-ps-0"><span>1</span><small>Property</small></div>
-          <div class="q-progress-step" id="q-ps-1"><span>2</span><small>Spaces</small></div>
-          <div class="q-progress-step" id="q-ps-2"><span>3</span><small>Content</small></div>
-          <div class="q-progress-step" id="q-ps-3"><span>4</span><small>Delivery</small></div>
+          <div class="q-progress-step active" id="q-ps-0"><span>1</span><small data-i18n="q_step1">Property</small></div>
+          <div class="q-progress-step" id="q-ps-1"><span>2</span><small data-i18n="q_step2">Spaces</small></div>
+          <div class="q-progress-step" id="q-ps-2"><span>3</span><small data-i18n="q_step3">Content</small></div>
+          <div class="q-progress-step" id="q-ps-3"><span>4</span><small data-i18n="q_step4">Delivery</small></div>
         </div>
         <div class="q-progress-bar"><div class="q-progress-fill" id="q-progress-fill"></div></div>
       </div>
@@ -2939,8 +2939,8 @@ document.addEventListener('keydown', function(e) {
 
       <!-- Footer nav -->
       <div class="q-footer">
-        <button class="q-btn-prev" id="q-prev" onclick="prevQuestionnaireStep()" style="display:none;">← Back</button>
-        <button class="q-btn-next" id="q-next" onclick="nextQuestionnaireStep()">Next →</button>
+        <button class="q-btn-prev" id="q-prev" onclick="prevQuestionnaireStep()" style="display:none;" data-i18n="q_btn_back">← Back</button>
+        <button class="q-btn-next" id="q-next" onclick="nextQuestionnaireStep()" data-i18n="q_btn_next">Next →</button>
         <button class="q-btn-send" id="q-send" data-i18n="q_btn_send" onclick="submitQuestionnaire('send')" style="display:none;">📩 Send Brief</button>
         <button class="q-btn-reserve" id="q-reserve" data-i18n="q_btn_reserve" onclick="submitQuestionnaire('reserve')" style="display:none;">✅ Send &amp; Reserve</button>
       </div>
@@ -3037,7 +3037,8 @@ function qCheckVideoFields(){
 
 function nextQuestionnaireStep(){
   if(!validateStep(qCurrentStep)){
-    alert('Please fill the required fields on this step.');
+    var tAlert = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : (typeof translations !== 'undefined' ? translations.en : {});
+    alert(tAlert.q_alert_fill || 'Please fill the required fields on this step.');
     return;
   }
   showQuestionnaireStep(qCurrentStep + 1);
@@ -3064,7 +3065,7 @@ function submitQuestionnaire(action){
   var required = ['q-prop-name','q-email','q-content-type','q-asset-qty','q-usage','q-delivery'];
   var vf = document.getElementById('q-video-fields'); if(vf && vf.style.display !== 'none'){ required.push('q-video-type','q-video-minutes'); }
   var missing = required.filter(function(id){ var el = document.getElementById(id); return !el || !String(el.value || '').trim(); });
-  if(missing.length){ alert('Please fill all required fields before sending.'); return; }
+  if(missing.length){ var tAlert2 = (typeof translations !== 'undefined' && translations[currentLang]) ? translations[currentLang] : (typeof translations !== 'undefined' ? translations.en : {}); alert(tAlert2.q_alert_send || 'Please fill all required fields before sending.'); return; }
 
   var form = document.getElementById('q-form-wrap'); if(form) form.style.display = 'none';
   var success = document.getElementById('q-success'); if(success) success.classList.add('show');
@@ -3495,6 +3496,13 @@ const translations = {
     svc3_title: 'Video Production', svc3_desc: 'Cinematic videos that bring your property to life and captivate potential guests',
     svc4_title: 'Drone Footage', svc4_desc: 'Breathtaking aerial perspectives that highlight your location and surroundings',
     svc5_title: '3D Virtual Tours', svc5_desc: 'Interactive 3D spaces with full spatial depth that immerse visitors in your property',
+    // MOBILE CARD CONTENT
+    mob_label_360: '360° Photography', mob_title_360: '360° Panoramic Experiences', mob_desc_360: 'Fully immersive virtual tours of your property, allowing potential guests to explore every room and outdoor space — optimised for web, mobile and VR.',
+    mob_label_photo: 'Photography', mob_title_photo: 'High-End Property Photography', mob_desc_photo: 'High-end photography that captures the essence and luxury of your property with stunning detail — from interiors to lifestyle and atmosphere.',
+    mob_label_video: 'Video Production', mob_title_video: 'Cinematic Property Films', mob_desc_video: 'Cinematic videos that tell your property\'s story and create emotional connections — from highlight reels and brand films to social media content.',
+    mob_label_drone: 'Drone Footage', mob_title_drone: 'Spectacular Aerial Perspectives', mob_desc_drone: 'Spectacular aerial perspectives showcasing your property\'s location, architecture and surroundings — shot by licensed drone pilots.',
+    mob_label_3d: '3D Virtual Tours', mob_title_3d: 'Interactive 3D Property Tours', mob_desc_3d: 'Interactive 3D tours that allow guests to explore your property in an engaging and immersive way — with accurate spatial depth and full navigation.',
+    mob_label_custom: 'Bespoke Solutions', mob_title_custom: 'Customise Your Service', mob_desc_custom: 'Have a unique vision? We design bespoke visual solutions — combining photography, video, drone and 3D tours — tailored to your property and goals.',
     svc_custom_title: 'Custom Project',
     svc_custom_desc: 'Have a unique vision or need a combination of services? Tell us about your project and we\'ll build a bespoke solution tailored to your exact needs.',
     svc_custom_tag1: 'Bespoke Packages', svc_custom_tag2: 'Multi-Service Bundles', svc_custom_tag3: 'Dedicated Support',
@@ -3574,6 +3582,10 @@ const translations = {
     q_usage_title: 'Usage & Delivery', q_usage: 'Intended Use', q_delivery: 'Preferred Delivery Format',
     q_notes_title: 'Special Requirements', q_notes: 'Any special requests, access restrictions, or additional notes?',
     q_btn_send: '📩 Send Brief', q_btn_reserve: '✅ Send & Reserve',
+    q_btn_back: '← Back', q_btn_next: 'Next →',
+    q_step1: 'Property', q_step2: 'Spaces', q_step3: 'Content', q_step4: 'Delivery',
+    q_alert_fill: 'Please fill the required fields on this step.',
+    q_alert_send: 'Please fill all required fields before sending.',
     q_success_send_title: 'Brief Sent!',
     q_success_send_msg: 'Thank you — we\'ve received your project brief and will get back to you within 24 hours to discuss your custom package.',
     q_success_reserve_title: 'Brief Sent & Session Reserved!',
@@ -3666,6 +3678,13 @@ const translations = {
     svc3_title: 'Produzione Video', svc3_desc: 'Video cinematografici che danno vita alla tua proprietà e catturano i potenziali ospiti',
     svc4_title: 'Riprese Drone', svc4_desc: 'Prospettive aeree mozzafiato che valorizzano la posizione e i dintorni della tua proprietà',
     svc5_title: 'Tour Virtuali 3D', svc5_desc: 'Spazi 3D interattivi con piena profondità spaziale che immergono i visitatori nella tua proprietà',
+    // MOBILE CARD CONTENT
+    mob_label_360: 'Fotografia 360°', mob_title_360: 'Esperienze Panoramiche a 360°', mob_desc_360: 'Tour virtuali completamente immersivi della tua proprietà, che permettono ai potenziali ospiti di esplorare ogni stanza e spazio esterno — ottimizzati per web, mobile e VR.',
+    mob_label_photo: 'Fotografia', mob_title_photo: 'Fotografia Immobiliare di Alto Livello', mob_desc_photo: 'Fotografia di alto livello che cattura l\'essenza e il lusso della tua proprietà con dettagli straordinari — dagli interni allo stile di vita e all\'atmosfera.',
+    mob_label_video: 'Produzione Video', mob_title_video: 'Film Cinematografici della Proprietà', mob_desc_video: 'Video cinematografici che raccontano la storia della tua proprietà e creano connessioni emotive — da highlight reel e brand film ai contenuti social.',
+    mob_label_drone: 'Riprese Drone', mob_title_drone: 'Prospettive Aeree Spettacolari', mob_desc_drone: 'Prospettive aeree spettacolari che mostrano la posizione, l\'architettura e i dintorni della tua proprietà — riprese da piloti drone certificati.',
+    mob_label_3d: 'Tour Virtuali 3D', mob_title_3d: 'Tour 3D Interattivi della Proprietà', mob_desc_3d: 'Tour 3D interattivi che permettono agli ospiti di esplorare la tua proprietà in modo coinvolgente e immersivo — con profondità spaziale accurata e navigazione completa.',
+    mob_label_custom: 'Soluzioni Su Misura', mob_title_custom: 'Personalizza il Tuo Servizio', mob_desc_custom: 'Hai una visione unica? Progettiamo soluzioni visive su misura — combinando fotografia, video, drone e tour 3D — adattate alla tua proprietà e ai tuoi obiettivi.',
     svc_custom_title: 'Progetto Personalizzato',
     svc_custom_desc: 'Hai una visione unica o hai bisogno di una combinazione di servizi? Raccontaci il tuo progetto e costruiremo una soluzione su misura per le tue esigenze.',
     svc_custom_tag1: 'Pacchetti su Misura', svc_custom_tag2: 'Bundle Multi-Servizio', svc_custom_tag3: 'Supporto Dedicato',
@@ -3745,6 +3764,10 @@ const translations = {
     q_usage_title: 'Utilizzo e Consegna', q_usage: 'Utilizzo Previsto', q_delivery: 'Formato di Consegna Preferito',
     q_notes_title: 'Requisiti Speciali', q_notes: 'Richieste speciali, restrizioni di accesso o note aggiuntive?',
     q_btn_send: '📩 Invia Brief', q_btn_reserve: '✅ Invia e Prenota',
+    q_btn_back: '← Indietro', q_btn_next: 'Avanti →',
+    q_step1: 'Proprietà', q_step2: 'Spazi', q_step3: 'Contenuto', q_step4: 'Consegna',
+    q_alert_fill: 'Compila i campi obbligatori in questo passaggio.',
+    q_alert_send: 'Compila tutti i campi obbligatori prima di inviare.',
     q_success_send_title: 'Brief Inviato!',
     q_success_send_msg: 'Grazie — abbiamo ricevuto il tuo brief e ti risponderemo entro 24 ore per discutere del tuo pacchetto personalizzato.',
     q_success_reserve_title: 'Brief Inviato e Sessione Prenotata!',
@@ -3826,6 +3849,13 @@ const translations = {
     svc3_title: 'Producción de Vídeo', svc3_desc: 'Vídeos cinematográficos que dan vida a tu propiedad y cautivan a los huéspedes potenciales',
     svc4_title: 'Imágenes de Dron', svc4_desc: 'Perspectivas aéreas impresionantes que destacan tu ubicación y el entorno',
     svc5_title: 'Tours Virtuales 3D', svc5_desc: 'Espacios 3D interactivos con plena profundidad espacial que sumergen a los visitantes en tu propiedad',
+    // MOBILE CARD CONTENT
+    mob_label_360: 'Fotografía 360°', mob_title_360: 'Experiencias Panorámicas 360°', mob_desc_360: 'Tours virtuales completamente inmersivos de tu propiedad, que permiten a los huéspedes potenciales explorar cada habitación y espacio exterior — optimizados para web, móvil y VR.',
+    mob_label_photo: 'Fotografía', mob_title_photo: 'Fotografía Inmobiliaria de Alto Nivel', mob_desc_photo: 'Fotografía de alto nivel que captura la esencia y el lujo de tu propiedad con un detalle impresionante — desde interiores hasta estilo de vida y atmósfera.',
+    mob_label_video: 'Producción de Vídeo', mob_title_video: 'Películas Cinematográficas de la Propiedad', mob_desc_video: 'Vídeos cinematográficos que cuentan la historia de tu propiedad y crean conexiones emocionales — desde highlight reels y brand films hasta contenido para redes sociales.',
+    mob_label_drone: 'Imágenes de Dron', mob_title_drone: 'Espectaculares Perspectivas Aéreas', mob_desc_drone: 'Espectaculares perspectivas aéreas que muestran la ubicación, arquitectura y entorno de tu propiedad — filmadas por pilotos de dron certificados.',
+    mob_label_3d: 'Tours Virtuales 3D', mob_title_3d: 'Tours 3D Interactivos de la Propiedad', mob_desc_3d: 'Tours 3D interactivos que permiten a los huéspedes explorar tu propiedad de forma atractiva e inmersiva — con profundidad espacial precisa y navegación completa.',
+    mob_label_custom: 'Soluciones a Medida', mob_title_custom: 'Personaliza Tu Servicio', mob_desc_custom: '¿Tienes una visión única? Diseñamos soluciones visuales a medida — combinando fotografía, vídeo, dron y tours 3D — adaptadas a tu propiedad y objetivos.',
     svc_custom_title: 'Proyecto Personalizado',
     svc_custom_desc: '¿Tienes una visión única o necesitas una combinación de servicios? Cuéntanos tu proyecto y crearemos una solución a medida para tus necesidades exactas.',
     svc_custom_tag1: 'Paquetes a Medida', svc_custom_tag2: 'Bundles Multi-Servicio', svc_custom_tag3: 'Soporte Dedicado',
@@ -3905,6 +3935,10 @@ const translations = {
     q_usage_title: 'Uso y Entrega', q_usage: 'Uso Previsto', q_delivery: 'Formato de Entrega Preferido',
     q_notes_title: 'Requisitos Especiales', q_notes: '¿Solicitudes especiales, restricciones de acceso o notas adicionales?',
     q_btn_send: '📩 Enviar Brief', q_btn_reserve: '✅ Enviar y Reservar',
+    q_btn_back: '← Volver', q_btn_next: 'Siguiente →',
+    q_step1: 'Propiedad', q_step2: 'Espacios', q_step3: 'Contenido', q_step4: 'Entrega',
+    q_alert_fill: 'Por favor, completa los campos requeridos en este paso.',
+    q_alert_send: 'Por favor, completa todos los campos requeridos antes de enviar.',
     q_success_send_title: '¡Brief Enviado!',
     q_success_send_msg: 'Gracias — hemos recibido tu brief y te responderemos en 24 horas para hablar sobre tu paquete personalizado.',
     q_success_reserve_title: '¡Brief Enviado y Sesión Reservada!',
@@ -4179,12 +4213,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   /* Card data matching the desktop svc-rows */
   var cards = [
-    { label: '360° Photography',    title: '360° Panoramic Experiences',   desc: 'Fully immersive virtual tours of your property, allowing potential guests to explore every room and outdoor space — optimised for web, mobile and VR.', img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800&q=80', action: function(){ openModal('svc360'); },   modalId: 'modal-svc360' },
-    { label: 'Photography',         title: 'High-End Property Photography', desc: 'High-end photography that captures the essence and luxury of your property with stunning detail — from interiors to lifestyle and atmosphere.',        img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80', action: function(){ openModal('svcPhoto'); },  modalId: 'modal-svcPhoto' },
-    { label: 'Video Production',    title: 'Cinematic Property Films',      desc: 'Cinematic videos that tell your property\'s story and create emotional connections — from highlight reels and brand films to social media content.',     img: 'https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=80', action: function(){ openModal('svcVideo'); },  modalId: 'modal-svcVideo' },
-    { label: 'Drone Footage',       title: 'Spectacular Aerial Perspectives',desc: 'Spectacular aerial perspectives showcasing your property\'s location, architecture and surroundings — shot by licensed drone pilots.',               img: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=80', action: function(){ openModal('svcDrone'); },  modalId: 'modal-svcDrone' },
-    { label: '3D Virtual Tours',    title: 'Interactive 3D Property Tours', desc: 'Interactive 3D tours that allow guests to explore your property in an engaging and immersive way — with accurate spatial depth and full navigation.',    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80', action: function(){ openModal('svc3D'); },    modalId: 'modal-svc3D' },
-    { label: 'Bespoke Solutions',   title: 'Customise Your Service',        desc: 'Have a unique vision? We design bespoke visual solutions — combining photography, video, drone and 3D tours — tailored to your property and goals.',      img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80', action: function(){ openQuestionnaire('svcCustom','Custom Service'); }, btn: 'Start Your Brief', btnKey: 'custom_btn', modalId: null },
+    { label: '360° Photography',    title: '360° Panoramic Experiences',   desc: 'Fully immersive virtual tours of your property, allowing potential guests to explore every room and outdoor space — optimised for web, mobile and VR.', img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=800&q=80', action: function(){ openModal('svc360'); },   modalId: 'modal-svc360',  labelKey: 'mob_label_360',   titleKey: 'mob_title_360',   descKey: 'mob_desc_360' },
+    { label: 'Photography',         title: 'High-End Property Photography', desc: 'High-end photography that captures the essence and luxury of your property with stunning detail — from interiors to lifestyle and atmosphere.',        img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80', action: function(){ openModal('svcPhoto'); },  modalId: 'modal-svcPhoto', labelKey: 'mob_label_photo',  titleKey: 'mob_title_photo',  descKey: 'mob_desc_photo' },
+    { label: 'Video Production',    title: 'Cinematic Property Films',      desc: 'Cinematic videos that tell your property\'s story and create emotional connections — from highlight reels and brand films to social media content.',     img: 'https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=800&q=80', action: function(){ openModal('svcVideo'); },  modalId: 'modal-svcVideo', labelKey: 'mob_label_video',  titleKey: 'mob_title_video',  descKey: 'mob_desc_video' },
+    { label: 'Drone Footage',       title: 'Spectacular Aerial Perspectives',desc: 'Spectacular aerial perspectives showcasing your property\'s location, architecture and surroundings — shot by licensed drone pilots.',               img: 'https://images.unsplash.com/photo-1473968512647-3e447244af8f?w=800&q=80', action: function(){ openModal('svcDrone'); },  modalId: 'modal-svcDrone', labelKey: 'mob_label_drone',  titleKey: 'mob_title_drone',  descKey: 'mob_desc_drone' },
+    { label: '3D Virtual Tours',    title: 'Interactive 3D Property Tours', desc: 'Interactive 3D tours that allow guests to explore your property in an engaging and immersive way — with accurate spatial depth and full navigation.',    img: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&q=80', action: function(){ openModal('svc3D'); },    modalId: 'modal-svc3D',   labelKey: 'mob_label_3d',    titleKey: 'mob_title_3d',    descKey: 'mob_desc_3d' },
+    { label: 'Bespoke Solutions',   title: 'Customise Your Service',        desc: 'Have a unique vision? We design bespoke visual solutions — combining photography, video, drone and 3D tours — tailored to your property and goals.',      img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80', action: function(){ openQuestionnaire('svcCustom','Custom Service'); }, btn: 'Start Your Brief', btnKey: 'custom_btn', modalId: null, labelKey: 'mob_label_custom', titleKey: 'mob_title_custom', descKey: 'mob_desc_custom' },
   ];
 
   var NAV_H   = 56;
@@ -4255,9 +4289,9 @@ window.addEventListener('DOMContentLoaded', () => {
       var body = document.createElement('div');
       body.className = 'mob-card-body';
       body.innerHTML =
-        '<span class="mob-card-label">' + d.label + '</span>' +
-        '<h3>' + d.title + '</h3>' +
-        '<p>' + d.desc + '</p>' +
+        '<span class="mob-card-label"' + (d.labelKey ? ' data-i18n="' + d.labelKey + '"' : '') + '>' + d.label + '</span>' +
+        '<h3' + (d.titleKey ? ' data-i18n="' + d.titleKey + '"' : '') + '>' + d.title + '</h3>' +
+        '<p' + (d.descKey ? ' data-i18n="' + d.descKey + '"' : '') + '>' + d.desc + '</p>' +
         '<button class="mob-card-btn">' +
           '<span' + (d.btnKey ? ' data-i18n="' + d.btnKey + '"' : '') + '>' + (d.btn || 'Explore service') + '</span>' +
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>' +
