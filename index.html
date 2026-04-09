@@ -1324,7 +1324,8 @@
         will-change: transform, opacity;
         display: flex;
         flex-direction: column;
-        transition: transform 0.08s linear, opacity 0.08s linear;
+        transform: translateZ(0);
+        backface-visibility: hidden;
       }
       .mob-card-img {
         width: 100%;
@@ -1351,8 +1352,6 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
         z-index: 2;
       }
       .mob-card-icon img { width: 34px; height: 34px; object-fit: cover; display: block;  }
@@ -4314,7 +4313,7 @@ window.addEventListener('DOMContentLoaded', () => {
     var stageH = window.innerHeight - NAV_H;
     var cardH  = stageH - (cards.length - 1) * PEEK; /* height of one card when fully visible */
     cardH = Math.min(cardH, stageH * 0.66);          /* cap at 66% of stage (~25% shorter) */
-
+    cachedCardH = cardH;
     /* Position all cards */
     cardEls.forEach(function(el, i) {
       el.style.height = cardH + 'px';
@@ -4331,39 +4330,41 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   /* ─── Scroll handler ─── */
+  var cachedCardH = 0;
   var rafPending = false;
   function onScroll() {
     if (!built || rafPending) return;
     rafPending = true;
     requestAnimationFrame(function() {
       rafPending = false;
-      var stageH = window.innerHeight - NAV_H;
-      var cardH  = Math.min(stageH - (cards.length - 1) * PEEK, stageH * 0.66);
+      
       var rect   = track.getBoundingClientRect();
       /* scrolled = how far into the track we are (0 at entry, positive as we scroll down) */
       var scrolled = -(rect.top - NAV_H);
 
       cardEls.forEach(function(el, i) {
-        /* Each card occupies one cardH worth of scroll */
-        var cardStart = i * cardH;
-        var progress  = scrolled - cardStart;
+  var progress = scrolled - i * cachedCardH;
+  var transform, zIdx, opacity;
 
-        if (progress <= 0) {
-          var stackY = i * PEEK;
-          el.style.transform = 'translateY(' + stackY + 'px) scale(1)';
-          el.style.zIndex    = cards.length - i;
-          el.style.opacity   = '1';
-        } else if (progress < cardH) {
-          var leaveY = i * PEEK - progress;
-          el.style.transform = 'translateY(' + leaveY + 'px) scale(1)';
-          el.style.zIndex    = cards.length - i;
-          el.style.opacity   = String(Math.max(0, 1 - progress / (cardH * 0.6)));
-        } else {
-          el.style.transform = 'translateY(-100%) scale(1)';
-          el.style.zIndex    = 0;
-          el.style.opacity   = '0';
-        }
-      });
+  if (progress <= 0) {
+    transform = 'translateY(' + (i * PEEK) + 'px) scale(1)';
+    zIdx      = String(cards.length - i);
+    opacity   = '1';
+  } else if (progress < cachedCardH) {
+    var leaveY = i * PEEK - progress;
+    transform  = 'translateY(' + leaveY + 'px) scale(1)';
+    zIdx       = String(cards.length - i);
+    opacity    = String(Math.max(0, 1 - progress / (cachedCardH * 0.6)));
+  } else {
+    transform  = 'translateY(-100%) scale(1)';
+    zIdx       = '0';
+    opacity    = '0';
+  }
+
+  if (el._t !== transform) { el.style.transform = transform; el._t = transform; }
+  if (el._z !== zIdx)      { el.style.zIndex    = zIdx;      el._z = zIdx; }
+  if (el._o !== opacity)   { el.style.opacity   = opacity;   el._o = opacity; }
+});
     });
   }
 
