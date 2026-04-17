@@ -2692,11 +2692,19 @@ document.addEventListener('keydown', function(e) {
   <div class="sec-head"><h2 data-i18n="contact_title">Get In Touch</h2><p data-i18n="contact_sub">Ready to showcase your property in the best light? Let's discuss your project</p></div>
   <div class="contact-grid">
     <div class="form-card">
+<form id="contact-form">
+<input type="hidden" name="access_key" value="e55a7cdc-0f41-4129-9e98-cd57eab7f412">
+<input type="hidden" name="subject" value="New Enquiry — LUXURTOUR">
+<input type="hidden" name="redirect" value="false">
       <h3 data-i18n="form_title">Send us a message</h3>
       <div class="form-row"><input type="text" class="fi" data-i18n-ph="form_name" placeholder="Your Name"/><input type="email" class="fi" data-i18n-ph="form_email" placeholder="Email Address"/></div>
       <div class="form-row"><input type="tel" class="fi" data-i18n-ph="form_phone" placeholder="Phone Number"/><input type="text" class="fi" data-i18n-ph="form_location" placeholder="Location"/></div>
       <textarea class="fi" data-i18n-ph="form_message" placeholder="Tell us about your project..."></textarea>
-      <button class="btn-send" data-i18n="form_btn">Send Message</button>
+      <button type="submit" class="btn-send" data-i18n="form_btn">Send Message</button>
+</form>
+<div id="form-success" style="display:none;margin-top:16px;padding:14px 18px;background:#e8f5ee;border:1.5px solid #c8e6d5;border-radius:10px;color:#05301D;font-weight:600;font-size:.9rem;">
+  ✓ Message sent! We'll get back to you within 24 hours.
+</div>
     </div>
     <div class="ci-stack">
       <div class="ci-card" style="cursor:pointer;" onclick="window.location.href='mailto&#58;info&#64;luxurtour&#46;com'"><div class="ci-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div class="ci-text"><strong data-i18n="ci_email">Email</strong><span><a href="mailto&#58;info&#64;luxurtour&#46;com" style="color:inherit;text-decoration:none;">info&#64;luxurtour&#46;com</a></span></div></div>
@@ -4534,5 +4542,36 @@ window.addEventListener('resize', function() {
   requestAnimationFrame(draw);
 })();
 </script>
+
+<script>
+document.getElementById('contact-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = this.querySelector('button[type="submit"]');
+  btn.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const formData = new FormData(this);
+  // Add field names for Web3Forms
+  formData.append('name', this.querySelector('input[type="text"]').value);
+  formData.append('email', this.querySelector('input[type="email"]').value);
+
+  const res = await fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    body: formData
+  });
+  const data = await res.json();
+
+  if (data.success) {
+    document.getElementById('form-success').style.display = 'block';
+    this.reset();
+    btn.textContent = 'Send Message';
+    btn.disabled = false;
+  } else {
+    btn.textContent = 'Error — Try Again';
+    btn.disabled = false;
+  }
+});
+</script>
+
 </body>
 </html>
